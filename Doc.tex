@@ -34,31 +34,35 @@ where $A \in \R^{n\times d}$ and $b \in \R^{n}$ given. The matrix $A$ is allowed
 
 Problem \eqref{eq::problem} frequently appears as a sub-problem in many computational and data science problems, for example, in many non-linear/general function minimisation routine linearises the problem and iteratively solve problems of the form \eqref{eq::problem}. In the following situations using SKiLLS yields significant computational advantage comparing to state-of-the-arts\footnote{Blendenpik \cite{doi:10.1137/090767911} for dense problems, SPQR \cite{Davis:2011ft} and Cholesky-preconditioned LSQR \cite{Scott:2014iq} for sparse problems}:
 
-\begin{enumerate}
-	\item $A$ is dense, large, sufficiently over-determined with unknown rank. 
+\begin{enumerate}\setlength{\itemsep}{-2pt}
+	\item $A$ is dense, large, sufficiently over-determined and (approximately) rank-deficient or with unknown rank.
 
 	\item $A$ is dense, large, sufficiently over-determined with high coherence\footnote{The coherence of a matrix A is defined as the largest Euclidean norm of $U$, where $U$ is defined in the reduced singular value decomposition of $A$. }.
 
 	\item $A$ is sparse, large, sufficiently over-determined with non-zero entries randomly distributed. 
 
-	\item $A$ is moderately sparse (e.g. one percent of entries are non-zero), large, moderately over-determined. 
+	\item $A$ is moderately sparse (e.g. one percent of entries are non-zero), large and moderately over-determined. 
 
 \end{enumerate}
 
 In the following situations using SKiLLS is competitive with state-of-the-arts
 
-\begin{enumerate}
+\begin{enumerate}\setlength{\itemsep}{-2pt}
 	\item $A$ is dense, large, sufficiently over-determined with full rank. 
 
 	\item $A$ is sparse, large, moderately over-determined. 
 \end{enumerate}
 
+Table \ref{tab::rank_def_accuracy} shows that SKiLLS is more robust than Blendenpik when the matrix $A$ is approximately rank-deficient. Figure \ref{fig::compare_blen_coherent} shows that SKiLLS outperforms Blendenpik when the matrix $A$ is (full rank) with high coherence. Figrue \ref{fig::compare_blen_semi-coherent} and Figure \ref{fig::compare_blen_incoherent} shows that SKiLLS is competitive with Blendenpik when the matrix $A$ is (full rank). 
+
+Figure \ref{fig::sparse_rand} shows that SKiLLS runs more than 10 times faster than current state-of-the-art sparse solvers on random sparse matrices. Figure \ref{fig::density001} shows that SKiLLS significantly outperforms its competitors when $A$ is moderately sparse, large and moderately over-determined.  Figure \ref{fig::all_solver_30}, Figure \ref{fig::all_solver_10_LSQR_5} and Figure \ref{fig::all_solver_10} showcase the competitiveness of SKiLLS on sparse, large and moderately over determined problems. 
 
 
 
-% 	If the matrix $A$ is dense with more than 1000 columns \color{red}{Quantify how much speed up we have, similarly for sparse problems} \color{black} and at least five times as many rows. We showed in our paper that noticable computational speed-up can be obtained comparing to LAPACK and the previous state-of-the-art Blendenpik \cite{doi:10.1137/090767911}. The performance improvement theoretically increases with the dimension of the matrix although we have not explicitly experimented for matrices with more than 90,000 rows. \color{red} Also put out improvement (robustness) over Blendenpik etc.... and view it as a marketing \color{black}
-% 	\item If the matrix $A$ is sparse, large (more than 1000 columns), moderately over-determined (more than 10 times row than columns) and not extremely well-conditioned. In this case SKiLLS achieves significant improvement comparing to state-of-the-art sparse QR factorisation methods, preconditioned iterative methods and previous sketching solvers. 
-% \end{enumerate}
+
+
+
+
 
 For further details of computational advantages, see our paper. \it{Computing Large Scale Linear Least Squares with SKiLLS, C. Cartis and Z. Shao}.
 
@@ -329,6 +333,95 @@ ls_sparse_spqr(*A, b, x_ls_qr,
 \clearpage
 \bibliography{bib/lib_20Aug.bib} 
 \bibliographystyle{abbrv}
+
+\appendix
+
+\section{Numerical Results}
+\begin{table}[H]
+\scriptsize
+\centering
+\begin{tabular}{l|rrrrrrr}
+               & lp\_ship12l                          & Franz1               & GL7d26                                & cis-n4c6-b2          & lp\_modszk1                           & rel5                                  & ch5-5-b1              \\ 
+\hline
+SVD          & 18.336                               & 26.503               & 50.875                                & 6.1E-14              & 33.236                                & 14.020                                & 7.3194                \\
+Blendenpk      & \multicolumn{1}{l}{~~~~~~~~~NaN~~~~} & 9730.700             & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & 3.0E+02              & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & 340.9200              \\
+Ski-LLS-dense  & 18.336                               & 26.503               & 50.875                                & 5.3E-14              & 33.236                                & 14.020                                & 7.3194                \\
+               & \multicolumn{1}{l}{}                 & \multicolumn{1}{l}{} & \multicolumn{1}{l}{}                  & \multicolumn{1}{l}{} & \multicolumn{1}{l}{}                  & \multicolumn{1}{l}{}                  & \multicolumn{1}{l}{}  \\
+               & n3c5-b2                              & ch4-4-b1             & n3c5-b1                               & n3c4-b1              & connectus                             & landmark                              & cis-n4c6-b3           \\ 
+\hline
+SVD            & 9.0E-15                              & 4.2328               & 3.4641                                & 1.8257               & 282.67                                & 1.1E-05                               & 30.996                \\
+Blendenpk      & 1.3E+02                              & 66.9330              & 409.8000                              & 8.9443               & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & 3756.200              \\
+Ski-LLS-dense  & 5.2E-15                              & 4.2328               & 3.4641                                & 1.8257               & 282.67                                & 1.1E-05                               & 30.996               
+\end{tabular}
+\caption{Residual of solvers for a range of approximate rank-deficient problems taken from the Florida matrix collection \cite{10.1145/2049662.2049663}. We see while Blendenpik struggles, SKiLLS achives the same residual accuracy as SVD method.}
+\label{tab::rank_def_accuracy}
+\end{table}
+
+\newcommand{\mysize}{0.45}
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{\mysize\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dense_co.eps} % first figure itself
+        \caption{Time taken by solvers to compute the solution of problem (\ref{eq::problem}) for $A$ being (full rank) coherent dense matrices of various sizes (x-axis)}
+        \label{fig::compare_blen_coherent}
+    \end{minipage}\hfill
+    \begin{minipage}{\mysize\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dense_semico.eps} % second figure itself
+        \caption{Time taken by solvers to compute the solution of problem (\ref{eq::problem}) for $A$ being (full rank) semi-coherent dense matrices of various sizes (x-axis)}
+        \label{fig::compare_blen_semi-coherent}
+    \end{minipage}
+    \begin{minipage}{\mysize\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dense_inco.eps} % second figure itself
+        \caption{Time taken by solvers to compute the solution of problem (\ref{eq::problem}) for $A$ being (full rank) incoherent dense matrices of various sizes (x-axis)}
+        \label{fig::compare_blen_incoherent}
+    \end{minipage}    
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{images/random_sparse_inco.eps}
+\caption{Our solver is much faster than state-of-the-arts LS_HSL and LS_SPQR on a range of random sparse data matrices.}
+\label{fig::sparse_rand}
+\end{figure}
+
+\renewcommand{\mysize}{0.42}
+\begin{figure}[]
+    \centering
+    \begin{minipage}{\mysize\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/sparse_florida_all_30.eps} % first figure itself
+        \caption{Performance profile comparison of Ski-LLS with LSRN, LS_HSL and LS_SPQR for all matrices $A\in\R^{n\times d}$ in the Florida matrix collection with $n\geq 30d$. }
+        \label{fig::all_solver_30}
+    \end{minipage}\hfill  
+    \centering
+    \begin{minipage}{\mysize\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/sparse_florida_all_10.eps} % first figure itself
+        \caption{Performance profile comparison of Ski-LLS with LSRN, LS_HSL and LS_SPQR for all matrices $A\in\R^{n\times d}$ in the Florida matrix collection with $n\geq 10d$.}
+        \label{fig::all_solver_10}
+    \end{minipage}\hfill  
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \begin{minipage}{\mysize\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/sparse_florida_lsqr_5_asp_10.eps} % first figure itself
+        \caption{Performance profile comparison of Ski-LLS with LSRN, LS_HSL and LS_SPQR for all matrices $A\in\R^{n\times d}$ in the Florida matrix collection with $n\geq 10d$ and the unpreconditioned LSQR takes more than 5 seconds to solve.}
+        \label{fig::all_solver_10_LSQR_5}
+    \end{minipage}\hfill  
+    \begin{minipage}{\mysize\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/asp10_density_001.eps}
+    \caption{All solvers, aspect ratio at least 10 and more than 1 percent number of non-zeros}
+    \label{fig::density001}
+    \end{minipage}
+
+\end{figure}
+
 
 
 

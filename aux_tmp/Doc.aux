@@ -32,8 +32,8 @@
 \@writefile{toc}{\contentsline {paragraph}{Dense Vector}{2}{section*.1}}
 \@writefile{toc}{\contentsline {paragraph}{Dense Matrix}{2}{section*.2}}
 \@writefile{toc}{\contentsline {paragraph}{Sparse Matrix}{2}{section*.3}}
-\@writefile{toc}{\contentsline {paragraph}{Examples}{2}{section*.4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Dense problems}{3}{subsection.3.2}}
+\@writefile{toc}{\contentsline {paragraph}{Examples}{3}{section*.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Dense problems}{4}{subsection.3.2}}
 \@writefile{toc}{\contentsline {paragraph}{Example}{4}{section*.5}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Sparse problems}{5}{subsection.3.3}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Reference}{6}{section.4}}
@@ -41,5 +41,28 @@
 \bibcite{doi:10.1137/090767911}{1}
 \bibcite{Davis:2011ft}{2}
 \bibcite{10.1145/2049662.2049670}{3}
-\bibcite{Scott:2014iq}{4}
+\bibcite{10.1145/2049662.2049663}{4}
+\bibcite{Scott:2014iq}{5}
 \bibstyle{abbrv}
+\citation{10.1145/2049662.2049663}
+\citation{10.1145/2049662.2049663}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Numerical Results}{7}{appendix.A}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Residual of solvers for a range of approximate rank-deficient problems taken from the Florida matrix collection \cite  {10.1145/2049662.2049663}. We see while Blendenpik struggles, SKiLLS achives the same residual accuracy as SVD method.\relax }}{7}{table.caption.7}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab::rank_def_accuracy}{{1}{7}{Residual of solvers for a range of approximate rank-deficient problems taken from the Florida matrix collection \cite {10.1145/2049662.2049663}. We see while Blendenpik struggles, SKiLLS achives the same residual accuracy as SVD method.\relax }{table.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Time taken by solvers to compute the solution of problem (\ref  {eq::problem}) for $A$ being (full rank) coherent dense matrices of various sizes (x-axis)\relax }}{8}{figure.caption.8}}
+\newlabel{fig::compare_blen_coherent}{{1}{8}{Time taken by solvers to compute the solution of problem (\ref {eq::problem}) for $A$ being (full rank) coherent dense matrices of various sizes (x-axis)\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Time taken by solvers to compute the solution of problem (\ref  {eq::problem}) for $A$ being (full rank) semi-coherent dense matrices of various sizes (x-axis)\relax }}{8}{figure.caption.8}}
+\newlabel{fig::compare_blen_semi-coherent}{{2}{8}{Time taken by solvers to compute the solution of problem (\ref {eq::problem}) for $A$ being (full rank) semi-coherent dense matrices of various sizes (x-axis)\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Time taken by solvers to compute the solution of problem (\ref  {eq::problem}) for $A$ being (full rank) incoherent dense matrices of various sizes (x-axis)\relax }}{8}{figure.caption.8}}
+\newlabel{fig::compare_blen_incoherent}{{3}{8}{Time taken by solvers to compute the solution of problem (\ref {eq::problem}) for $A$ being (full rank) incoherent dense matrices of various sizes (x-axis)\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Our solver is much faster than state-of-the-arts LS_HSL and LS_SPQR on a range of random sparse data matrices.\relax }}{9}{figure.caption.9}}
+\newlabel{fig::sparse_rand}{{4}{9}{Our solver is much faster than state-of-the-arts LS_HSL and LS_SPQR on a range of random sparse data matrices.\relax }{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Performance profile comparison of Ski-LLS with LSRN, LS_HSL and LS_SPQR for all matrices $A\in \mathbb  {R}^{n\times d}$ in the Florida matrix collection with $n\geq 30d$. \relax }}{9}{figure.caption.10}}
+\newlabel{fig::all_solver_30}{{5}{9}{Performance profile comparison of Ski-LLS with LSRN, LS_HSL and LS_SPQR for all matrices $A\in \R ^{n\times d}$ in the Florida matrix collection with $n\geq 30d$. \relax }{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Performance profile comparison of Ski-LLS with LSRN, LS_HSL and LS_SPQR for all matrices $A\in \mathbb  {R}^{n\times d}$ in the Florida matrix collection with $n\geq 10d$.\relax }}{9}{figure.caption.10}}
+\newlabel{fig::all_solver_10}{{6}{9}{Performance profile comparison of Ski-LLS with LSRN, LS_HSL and LS_SPQR for all matrices $A\in \R ^{n\times d}$ in the Florida matrix collection with $n\geq 10d$.\relax }{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Performance profile comparison of Ski-LLS with LSRN, LS_HSL and LS_SPQR for all matrices $A\in \mathbb  {R}^{n\times d}$ in the Florida matrix collection with $n\geq 10d$ and the unpreconditioned LSQR takes more than 5 seconds to solve.\relax }}{10}{figure.caption.11}}
+\newlabel{fig::all_solver_10_LSQR_5}{{7}{10}{Performance profile comparison of Ski-LLS with LSRN, LS_HSL and LS_SPQR for all matrices $A\in \R ^{n\times d}$ in the Florida matrix collection with $n\geq 10d$ and the unpreconditioned LSQR takes more than 5 seconds to solve.\relax }{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces All solvers, aspect ratio at least 10 and more than 1 percent number of non-zeros\relax }}{10}{figure.caption.11}}
+\newlabel{fig::density001}{{8}{10}{All solvers, aspect ratio at least 10 and more than 1 percent number of non-zeros\relax }{figure.caption.11}{}}

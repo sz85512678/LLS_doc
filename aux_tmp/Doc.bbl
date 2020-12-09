@@ -20,6 +20,12 @@ T.~A. Davis.
 \newblock {\em ACM Transactions on Mathematical Software (TOMS)}, 38(1), Dec.
   2011.
 
+\bibitem{10.1145/2049662.2049663}
+T.~A. Davis and Y.~Hu.
+\newblock {The University of Florida Sparse Matrix Collection}.
+\newblock {\em ACM Transactions on Mathematical Software (TOMS)}, 38(1), Dec.
+  2011.
+
 \bibitem{Scott:2014iq}
 J.~Scott and M.~T{\r{u}}ma.
 \newblock {HSL_MI28: An Efficient and Robust Limited-Memory Incomplete Cholesky
