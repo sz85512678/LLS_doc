@@ -1,0 +1,335 @@
+\documentclass[english,11pt]{article}
+
+\input{preambles}
+
+\usepackage[margin=1in]{geometry}
+ \usepackage{setspace}
+% \setstretch{}
+\usepackage{listings}
+
+\lstset { %
+    language=C++,
+    backgroundcolor=\color{black!5}, % set backgroundcolor
+    basicstyle=\footnotesize,% basic font setting
+}
+
+\begin{document}
+
+\title{Computing Large Scale Linear Least Squares with SKiLLS}
+
+\author{Zhen Shao}\maketitle
+
+\section{Overview}
+
+SKiLLS (SKetchIng-Linear-Least-Sqaures) is a C++ package for finding solutions to over-determined linear least square problems. SKiLLS uses a modern dimensionality reduction technique called sketching, and is particularly suited for large scale linear least squares where the number of measurements/observations is far greater than the number of variables. 
+
+Mathematically, SkiLLS solves
+
+\begin{align}
+\min_{x \in \R^{d}} f(x): = \|Ax - b\|_2^2, \label{eq::problem}
+\end{align}
+where $A \in \R^{n\times d}$ and $b \in \R^{n}$ given. The matrix $A$ is allowed to be rank-deficient or nearly rank-deficient. 
+
+\subsection{When to use SKiLLS}
+
+Problem \eqref{eq::problem} frequently appears as a sub-problem in many computational and data science problems, for example, in many non-linear/general function minimisation routine linearises the problem and iteratively solve problems of the form \eqref{eq::problem}. In the following situations using SKiLLS yields significant computational advantage comparing to state-of-the-arts\footnote{Blendenpik \cite{doi:10.1137/090767911} for dense problems, SPQR \cite{Davis:2011ft} and Cholesky-preconditioned LSQR \cite{Scott:2014iq} for sparse problems}:
+
+\begin{enumerate}
+	\item $A$ is dense, large, sufficiently over-determined with unknown rank. 
+
+	\item $A$ is dense, large, sufficiently over-determined with high coherence\footnote{The coherence of a matrix A is defined as the largest Euclidean norm of $U$, where $U$ is defined in the reduced singular value decomposition of $A$. }.
+
+	\item $A$ is sparse, large, sufficiently over-determined with non-zero entries randomly distributed. 
+
+	\item $A$ is moderately sparse (e.g. one percent of entries are non-zero), large, moderately over-determined. 
+
+\end{enumerate}
+
+In the following situations using SKiLLS is competitive with state-of-the-arts
+
+\begin{enumerate}
+	\item $A$ is dense, large, sufficiently over-determined with full rank. 
+
+	\item $A$ is sparse, large, moderately over-determined. 
+\end{enumerate}
+
+
+
+
+% 	If the matrix $A$ is dense with more than 1000 columns \color{red}{Quantify how much speed up we have, similarly for sparse problems} \color{black} and at least five times as many rows. We showed in our paper that noticable computational speed-up can be obtained comparing to LAPACK and the previous state-of-the-art Blendenpik \cite{doi:10.1137/090767911}. The performance improvement theoretically increases with the dimension of the matrix although we have not explicitly experimented for matrices with more than 90,000 rows. \color{red} Also put out improvement (robustness) over Blendenpik etc.... and view it as a marketing \color{black}
+% 	\item If the matrix $A$ is sparse, large (more than 1000 columns), moderately over-determined (more than 10 times row than columns) and not extremely well-conditioned. In this case SKiLLS achieves significant improvement comparing to state-of-the-art sparse QR factorisation methods, preconditioned iterative methods and previous sketching solvers. 
+% \end{enumerate}
+
+For further details of computational advantages, see our paper. \it{Computing Large Scale Linear Least Squares with SKiLLS, C. Cartis and Z. Shao}.
+
+\section{Installing SKiLLS}
+\subsection{Dependency}
+\subsection{Installation instruction}
+\subsection{Test the installation}
+
+\section{Using SKiLLS}
+
+\color{red} This is a libary of two/three routines etc....\color{black}
+
+\subsection{Data structure}
+
+\color{red} Maybe point out to the header file \color{black} (or quote the header file). 
+\paragraph{Dense Vector}
+SKiLLS uses C++ class Vec for dense vectors. To create a $n\times 1$ vector from already existed data, take a pointer to the data and call Vec(n, *data). 
+
+\paragraph{Dense Matrix}
+SKiLLS uses C++ class Mat for dense matrices. To create a $n \times d$ matrix from already existed data, take a pointer to the data and call Mat(n, d, *data). Basic matrix operations such as return a specific row, column, or matrix-matrix and matrix vector multiplications are implemented.  
+
+\paragraph{Sparse Matrix}
+SKiLLS uses Compressed Column Data structure for sparse matrices and vectors. The sparse data structure is from SuiteSparse \cite{10.1145/2049662.2049670}. In particular, the cs_dl structure used as the input matrix format for sparse linear least squares is taken from the CXSparse package from SuiteSparse. It is a C structure with 7 fields: 
+
+\begin{itemize}
+	\setlength\itemsep{-0.5em}
+	\item nzmax: maximum number of non-zeros. 
+
+	\item m: number of rows. 
+
+	\item n: number of columns. 
+
+	\item *p: column indices (size nzmax)
+
+	\item *i: row indices, size nzmax. 
+
+	\item *x: numerical values of non-zeros, size nzmax. 
+
+	\item nz: -1 for compressed column format. 
+\end{itemize}
+
+Sometimes we will also use the data structure cholmod_sparse for sparse matrix in compressed column format. It has a similar structures. For more information, see the header file or documentation of SuiteSparse.
+
+\paragraph{Examples}
+
+We give two examples of constructing dense and sparse matrices from user given data. 
+
+The below code snippet creates a dense matrix and a vector.
+
+\begin{lstlisting}
+	long m = 4;
+	long n = 2;
+	double data_A[8] = {0.306051,-1.53078,1.64493,-1.61322,
+		-0.2829,0.474476,-0.586278,-0.610202};
+
+	double data_b[4] = {0.0649338,0.845946,-0.0164085,0.247119};
+
+	Mat_d A(m,n,data_A);
+	Vec_d b(m,data_b);
+\end{lstlisting}
+
+The below code snippet creates a sparse matrix.
+
+\begin{lstlisting}
+    long m = 4;
+    long n = 3;
+    long nnz = 5;
+
+    long col[4] = {1,  2,  4,  6};
+    long row[5] = {1,  1,  3,  2,  4}; 
+    double val[5] = {2.0,  3.0,  1.0,  4.0,  5.0};
+    long col_0[4];
+    long row_0[5];
+
+    // convert to zero based indices
+    for (long i=0; i<n+1; i++){
+     col_0[i] = col[i]-1;
+    }
+
+    for (long i =0; i<nnz; i++){
+     row_0[i] = row[i]-1;
+    }
+
+    cholmod_common Common, *cc;
+    cc = &Common;
+    cholmod_l_start(cc);
+    cc->print = 4;
+
+    cholmod_sparse* A;
+    A = cholmod_l_allocate_sparse(
+    m, n, nnz, true, true, 0, CHOLMOD_REAL, cc);
+
+    A->p = col_0;
+    A->i = row_0;
+    A->x = val;
+
+    cholmod_l_print_sparse( A, "A", cc);
+
+    cholmod_l_finish(cc);
+\end{lstlisting}
+
+
+
+
+
+\subsection{Dense problems}
+% // C++ solver for dense linear least squares using hashing
+% // Solving the linear least sqaures min_x |Ax-b|_2
+
+To compute a solution of a linear least square problem where the matrix $A$ is dense, a call of the following form should be made. \\
+
+ls_dense_hashing_blendenpik(A, b, x, rank, flag, it, gamma, k, abs_tol, rcond, it_tol, max_it, debug, wisdom):
+
+% \\
+\color{red} seperate into input, output and options .... typical correct values of these parameters \color{black}
+\begin{itemize}
+	\setlength\itemsep{-0.5em}
+	\item A is an input of derived type containing the $\R^{m\times n}$ matrix.
+
+	\item b is an input of derived type containing the $\R^m$ vector.
+
+	\item x is an output of derived type containing the $\R^n$ vector solution on exit. 
+
+	\item rank is an output of derived type containing a scaler, detected rank of the matrix $A$. 
+
+	\item flag indicates LSQR convergence. 
+
+	\item it indicates LSQR iteration count. 
+
+	\item gamma is the over-sampling ratio used in sketching. 
+
+	\item $k$ is number of non-zeros per column in the hashing matrix. 
+
+	\item abs_tol is absolute residual tolerance, the algorithm will immediately return if it founds a vector $x$ with $\|Ax-b\| \leq \text{abs_tol}$.
+
+	\item rcond a parameter used in column pivoted QR to determine rank. After a column pivoted QR factorization of the matrix $SAP =QR$, diagonal entried of $R$ less than rcond is treated as zero and the whole corresponding column in the matrix $Q$ is discarded. 
+
+	\item it_tol is tolerance used in the preconditioned LSQR algorithm for LSQR convergence.
+
+	\item max_it is maximum iteration allowed in the preconditioned LSQR algorithm. 
+
+	\item debug is a flag. If debug=1 then the solver will print some additional information.
+
+	\item wisdom is a flag. If wisdom=1 then the user is expected to have provided a wisdom file for the Discrete Cosine Transform used in sketching. 
+\end{itemize}
+
+If the matrix $A$ is known to be of full numerical rank, then a different routine can be used which is slightly faster:
+
+ls_dense_hashing_blendenpik_noCPQR(A, b, x, rank, flag, it, gamma, k, it_tol, max_it, debug, wisdom):
+
+The arguments usage is the same as above, but we don't need the rank-detection parameter rcond, and the shortcut related to abs_tol is not implemented.
+
+\paragraph{Example}
+
+The following program solves an example of problem \eqref{eq::problem} with given $A$ and $b$. 
+
+The matrix $A$ is created by
+\begin{lstlisting}
+#include <iostream>
+#include "Config.hpp"
+#include "SpMat.hpp"
+#include "Random.hpp"
+#include <math.h>
+#include "RandSolver.hpp"
+#include "cs.h"
+#include <stdio.h> 
+#include "SuiteSparseQR.hpp"
+#include "cholmod.h"
+#include "lsex_all_in_c.h"
+#include "IterSolver.hpp"
+#include <sys/timeb.h>
+#include "bench_config.hpp"
+#include "blendenpik.hpp"
+
+int main(int argc, char **argv)
+{
+	// create data
+	long m = 4;
+	long n = 2;
+	double data_A[8] = {0.306051,-1.53078,1.64493,-1.61322,
+	-0.2829,0.474476,-0.586278,-0.610202};
+
+	double data_b[4] = {0.0649338,0.845946,-0.0164085,0.247119};
+
+	Mat_d A(m,n,data_A);
+	Vec_d b(m,data_b);
+
+	// parameters
+	long k = NNZ_PER_COLUMN;
+	double gamma = OVER_SAMPLING_RATIO;
+	long max_it = MAX_IT;
+	double it_tol = IT_TOL;
+	double rcond = 1e-10;
+	int wisdom = 0;
+	double abs_tol = ABS_TOL;
+
+	// storage
+
+	long it;
+	int flag;
+	long rank;
+	double residual;   
+	Vec_d x(A.n());
+
+	// solve
+	ls_dense_hashing_blendenpik(
+	A, b, x, rank, flag, it, gamma, k, abs_tol, 
+	rcond, it_tol, max_it, debug, wisdom);
+
+	std::cout << "A is: "<< A << std::endl;
+	std::cout << "b is: "<< b << std::endl;
+	std::cout << "solution is: "<< x << std::endl;
+
+	// compute residual
+	A.mv('n', 1, x, -1, b); 
+	std::cout << "Residual of ls_blendenpik_hashing is: "<<  nrm2(b) << std::endl;
+	std::cout << "Iteration of ls_blendenpik_hashing is: " << it << std::endl;
+
+}
+\end{lstlisting}
+
+
+\subsection{Sparse problems}
+
+To compute a solution of a linear least square problem where the matrix $A$ is sparse, a call of the following form should be made. \\
+
+ls_sparse_spqr(*A, b, x_ls_qr, 
+    rank, flag, it, gamma, k, abs_tol, ordering, it_tol, max_it, rcond, peturb, debug):
+
+\begin{itemize}
+	\setlength\itemsep{-0.5em}
+	\item A is an input of derived type containing the $\R^{m\times n}$ matrix.
+
+	\item b is an input of derived type containing the $\R^m$ vector.
+
+	\item x is an output of derived type containing the $\R^n$ vector solution on exit. 
+
+	\item rank is an output of derived type containing a scaler, detected rank of the matrix $A$. 
+
+	\item flag indicates LSQR convergence. 
+
+	\item it indicates LSQR iteration count. 
+
+	\item gamma is the over-sampling ratio used in sketching. 
+
+	\item $k$ is number of non-zeros per column in the hashing matrix.
+
+	\item abs_tol is absolute residual tolerance, the algorithm will immediately return if it founds a vector $x$ with $\|Ax-b\| \leq \text{abs_tol}$.
+
+	\item ordering is a parameter used in to select fill-reduced ordering strategy in sparse QR factorization.
+
+	\item it_tol is tolerance used in the preconditioned LSQR algorithm for LSQR convergence.
+
+	\item max_it is maximum iteration allowed in the preconditioned LSQR algorithm. 
+
+	\item rcond is a parameter used in sparse rank-revealing QR to determine rank. 
+
+	\item perturb is a potential pivot perturbation if $R_{11}$ returned by the sparse QR factorization is ill-conditioned. 
+
+	\item debug is a flag. If debug=1 then the solver will print some additional information. 
+
+\end{itemize}
+
+
+\section{Reference}
+
+
+\clearpage
+\bibliography{bib/lib_20Aug.bib} 
+\bibliographystyle{abbrv}
+
+
+
+\end{document}

@@ -1,0 +1,30 @@
+\begin{thebibliography}{1}
+
+\bibitem{doi:10.1137/090767911}
+H.~Avron, P.~Maymounkov, and S.~Toledo.
+\newblock {Blendenpik: Supercharging LAPACK's Least-Squares Solver}.
+\newblock {\em SIAM Journal on Scientific Computing}, 32(3):1217--1236, Jan.
+  2010.
+
+\bibitem{Davis:2011ft}
+T.~A. Davis.
+\newblock {Algorithm 915, SuiteSparseQR: Multifrontal multithreaded
+  rank-revealing sparse QR factorization}.
+\newblock {\em ACM Transactions on Mathematical Software (TOMS)}, 38(1):8, Nov.
+  2011.
+
+\bibitem{10.1145/2049662.2049670}
+T.~A. Davis.
+\newblock {Algorithm 915, SuiteSparseQR: Multifrontal Multithreaded
+  Rank-Revealing Sparse QR Factorization}.
+\newblock {\em ACM Transactions on Mathematical Software (TOMS)}, 38(1), Dec.
+  2011.
+
+\bibitem{Scott:2014iq}
+J.~Scott and M.~T{\r{u}}ma.
+\newblock {HSL_MI28: An Efficient and Robust Limited-Memory Incomplete Cholesky
+  Factorization Code}.
+\newblock {\em ACM Transactions on Mathematical Software}, 40(4):1--19, June
+  2014.
+
+\end{thebibliography}

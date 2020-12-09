@@ -1,0 +1,113 @@
+%PUT ALL THE PREAMBLES HERE
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+
+% \makeatletter % to be able to overwrite package containing @
+\usepackage{siunitx}
+% \usepackage{subfig}
+\usepackage{colonequals}
+\usepackage[super]{nth}
+\usepackage{algorithm}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{url}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{pbox}
+\usepackage{tabulary}
+\usepackage{breqn}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage[font={small}]{caption}
+\usepackage{enumitem}
+\usepackage{physics}
+\usepackage{lipsum}
+\usepackage{mwe}
+\usepackage{breqn}
+\usepackage[noend]{algpseudocode}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{enumitem}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+} % set up hyperlink for table of content
+% \usepackage[]{algorithm2e}
+% \SetKwInOut{Parameter}{Parameter}
+
+\graphicspath{{./images/}{./}}
+
+\newtheorem{claim}{Claim}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\newtheorem{corallary}{Corollary}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem*{observation}{Observation}
+\newtheorem*{myQuote}{Quote}
+\newtheorem{fact}{Fact}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{example}{Example}
+% \newtheorem{proof}{Proof}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\I}{\mathbb{I}}
+
+% \renewenvironment{proof}{{\bfseries Proof}}{\qed}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+\newtheorem*{theorem*}{Theorem}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+
+\newcommand{\norms}[1]{\|#1\|_2^2}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\renewcommand{\norms}[1]{\|#1\|_2^2}
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+
+% Jari
+
+\newtheorem{alg}{Algorithm}
+% Maths
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\abs}[1]{\lvert #1 \rvert}
+\renewcommand{\norm}[1]{\lVert #1 \rVert}
+\newcommand{\snorm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\deq}{\mathrel{\mathop:}=}
+\newcommand{\eqd}{=\mathrel{\mathop:}}
+\renewcommand{\grad}{\nabla}
+\renewcommand{\d}{\partial}
+%English
+\newcommand{\cf}{\hbox{{cf.}}\xspace}
+\newcommand{\deletia}{\ldots [deletia] \ldots}
+\newcommand{\etal}{\hbox{{et al.}}\xspace}
+\newcommand{\eg}{\hbox{{e.g.}}\xspace}
+\newcommand{\ie}{\hbox{{i.e.}}\xspace}
+\newcommand{\scil}{\hbox{{sc.}}\xspace} %scilicet: it is permitted to know
+\newcommand{\st}{\hbox{{s.t.}}\xspace}
+\newcommand{\wrt}{\hbox{{w.r.t.}}\xspace}
+\newcommand{\etc}{\hbox{{etc.}}\xspace}
+\newcommand{\viz}{\hbox{{viz.}}\xspace} %videlicet: it is permitted to see
+\newcommand{\vs}{\hbox{{vs.}}\xspace}
+
+
+\newenvironment{proof_sketch}{%
+  \renewcommand{\proofname}{Proof Sketch}\proof}{\endproof}
+
