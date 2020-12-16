@@ -7,45 +7,45 @@ Repeated entry---line 4791 of file bib/lib_20Aug.bib
  : @article{doi:10.1137/090767911
  :                               ,
 I'm skipping whatever remains of this entry
-You've used 5 entries,
+You've used 8 entries,
             2118 wiz_defined-function locations,
-            525 strings with 4515 characters,
-and the built_in function-call counts, 1410 in all, are:
-= -- 138
-> -- 58
+            542 strings with 5005 characters,
+and the built_in function-call counts, 2577 in all, are:
+= -- 246
+> -- 142
 < -- 0
-+ -- 23
-- -- 18
-* -- 111
-:= -- 252
-add.period$ -- 15
-call.type$ -- 5
-change.case$ -- 24
++ -- 56
+- -- 48
+* -- 214
+:= -- 457
+add.period$ -- 24
+call.type$ -- 8
+change.case$ -- 48
 chr.to.int$ -- 0
-cite$ -- 5
-duplicate$ -- 53
-empty$ -- 111
-format.name$ -- 18
-if$ -- 280
+cite$ -- 8
+duplicate$ -- 87
+empty$ -- 182
+format.name$ -- 48
+if$ -- 507
 int.to.chr$ -- 0
-int.to.str$ -- 5
-missing$ -- 5
-newline$ -- 28
-num.names$ -- 10
-pop$ -- 14
+int.to.str$ -- 8
+missing$ -- 9
+newline$ -- 43
+num.names$ -- 16
+pop$ -- 36
 preamble$ -- 1
-purify$ -- 19
+purify$ -- 40
 quote$ -- 0
-skip$ -- 39
+skip$ -- 61
 stack$ -- 0
-substring$ -- 75
-swap$ -- 5
+substring$ -- 125
+swap$ -- 8
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 20
+type$ -- 30
 warning$ -- 0
-while$ -- 15
-width$ -- 6
-write$ -- 57
+while$ -- 25
+width$ -- 9
+write$ -- 91
 (There was 1 error message)
