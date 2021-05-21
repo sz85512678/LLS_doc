@@ -32,9 +32,7 @@ where $A \in \R^{n\times d}$ and $b \in \R^{n}$ given. The matrix $A$ is allowed
 
 \subsection{When to use Ski-LLS}
 
-If $A$ in \eqref{eq::problem} is dense, the state-of-the-art sketching solver is Blendenpik \cite{doi:10.1137/090767911}. Comparing to solvers in the classical state-of-the-art numerical package LAPACK \cite{laug}, Blendenpik is two times faster on matrices of size $20,000 \times 500$ and four times faster on matrices of size $100,000 \times 2500$. Comparing to classical iterative solver LSQR \cite{Paige:1982aa}, Blendenpik is 80 times faster on matrices of size $20,000 \times 1,000$ with condition number $100$. 
-
-Blendenpik only solves \eqref{eq::problem} when the matrix $A$ has full numerical rank, as illustrated in Table \ref{tab::rank_def_accuracy}. Two solvers are included in the library Ski-LLS for dense $A$. The robust version, \\{\it{ls_dense_hashing_blendenpik} }solves problems \ref{eq::problem} when $A$ is numecially rank-deficient but is as fast as Blendenpik when $A$ has full rank (takes 70\% to 130\% time on matrices of different sizes). The fast version, {\it{ls_dense_hashing_blendenpik_noCPQR}} is 1.6 times faster than Blendenpik on coherent matrices\footnote{Matrices of the form $A \in \R^{n\times d} = \bigl(\begin{smallmatrix} I_{d\times d} \\ 0  \end{smallmatrix}\bigr) + 10^{-8}J_{n,d} $ where $J_{n,d} \in \R^{n \times d}$ is a matrix of all ones.} of size $40,000 \times 4,000$ and $90,000 \times 2250$, and slightly faster than Blendenpik on other types of input (about 1.1 times faster).
+If $A$ in \eqref{eq::problem} is dense, the state-of-the-art sketching solver is Blendenpik \cite{doi:10.1137/090767911}. Comparing to solvers in the classical state-of-the-art numerical package LAPACK \cite{laug}, Blendenpik is two times faster on matrices of size $20,000 \times 500$ and four times faster on matrices of size $100,000 \times 2500$. Comparing to classical iterative solver LSQR \cite{Paige:1982aa}, Blendenpik is 80 times faster on matrices of size $20,000 \times 1,000$ with condition number $100$. However, Blendenpik only solves \eqref{eq::problem} when the matrix $A$ is dense, and has full numerical rank. Ski-LLS improves upon Blendenpik on both robustness and speed. Two solvers are included in the library Ski-LLS for dense $A$. The robust version, \\{\it{ls_dense_hashing_blendenpik} }solves problems \eqref{eq::problem} when $A$ is numerically rank-deficient but is as fast as Blendenpik when $A$ has full rank (takes 70\% to 130\% time on matrices of different sizes). The fast version, {\it{ls_dense_hashing_blendenpik_noCPQR}} is 1.6 times faster than Blendenpik on coherent matrices\footnote{Matrices of the form $A \in \R^{n\times d} = \bigl(\begin{smallmatrix} I_{d\times d} \\ 0  \end{smallmatrix}\bigr) + 10^{-8}J_{n,d} $ where $J_{n,d} \in \R^{n \times d}$ is a matrix of all ones.} of size $40,000 \times 4,000$ and $90,000 \times 2250$, and slightly faster than Blendenpik on other types of input (about 1.1 times faster).
 
 If $A$ in \eqref{eq::problem} is sparse, the state-of-the-art solvers are SPQR \cite{Davis:2011ft} and HSL \cite{Scott:2014iq}, which uses sparse QR factorization of $A$ and LSQR with an incomplete Cholesky preconditioner, respectively. Our library has a single sparse solver, {\it ls_sparse_spqr}. It significantly outperforms both state-of-the-art sparse solvers on large random sparse ill-conditioned matrices. It is 10 times faster than HSL and 7 times faster than SPQR on $120,000 \times 5,000$ random sparse matrices with $1\%$ non-zero entries and condition number equals to $10^6$. And it is 3 times faster than both HSL and SPQR on $40,000 \times 2,000$ matrices with $1\%$ non-zero entries and condition number equals to $10^6$.
 
@@ -42,50 +40,152 @@ Our sparse solver also performs extremely well on highly over-determined sparse 
 
 Because sketching exploits redundancy of rows, the performance gain compared to non-sketching solvers\footnote{LAPACK, HSL, SPQR} will be larger on $A$ with larger $n/d$ radio.
 
-For further details of computational advantages, see our paper. {\it{Computing Large Scale Linear Least Squares with Ski-LLS, C. Cartis and Z. Shao}}.
-
-
-% Problem \eqref{eq::problem} frequently appears as a sub-problem in many computational and data science problems, for example, in many non-linear/general function minimisation routine linearises the problem and iteratively solve problems of the form \eqref{eq::problem}. In the following situations using Ski-LLS yields significant computational advantage comparing to state-of-the-arts\footnote{Blendenpik \cite{doi:10.1137/090767911} for dense problems, SPQR \cite{Davis:2011ft} and Cholesky-preconditioned LSQR \cite{Scott:2014iq} for sparse problems}:
-
-% {\color{red} Begin with LAPACK, and give individual data point about how faster we are comparing to Blendenpik, set expectations about the smallest dimensions and over-determinancy ratio. }
-% \begin{enumerate}\setlength{\itemsep}{-2pt}
-% 	\item $A$ is dense, large, sufficiently over-determined and (approximately) rank-deficient or with unknown rank. E.g. one of the matrices we ran numerical test on has dimension $50000 \times 4000$.
-
-% 	\item $A$ is dense, large, sufficiently over-determined with high coherence\footnote{The coherence of a matrix A is defined as the largest Euclidean norm of $U$, where $U$ is defined in the reduced singular value decomposition of $A$. }.
-
-% 	\item $A$ is sparse, large, sufficiently over-determined with non-zero entries randomly distributed. 
-
-% 	\item $A$ is moderately sparse (e.g. one percent of entries are non-zero), large and moderately over-determined. 
-
-% \end{enumerate}
-
-% In the following situations using Ski-LLS is competitive with state-of-the-arts
-
-% \begin{enumerate}\setlength{\itemsep}{-2pt}
-% 	\item $A$ is dense, large, sufficiently over-determined with full rank. 
-
-% 	\item $A$ is sparse, large, moderately over-determined. 
-% \end{enumerate}
-
-% Table \ref{tab::rank_def_accuracy} shows that Ski-LLS is more robust than Blendenpik when the matrix $A$ is approximately rank-deficient. Figure \ref{fig::compare_blen_coherent} shows that Ski-LLS outperforms Blendenpik when the matrix $A$ is (full rank) with high coherence. Figrue \ref{fig::compare_blen_semi-coherent} and Figure \ref{fig::compare_blen_incoherent} shows that Ski-LLS is competitive with Blendenpik when the matrix $A$ is (full rank). 
-
-% Figure \ref{fig::sparse_rand} shows that Ski-LLS runs more than 10 times faster than current state-of-the-art sparse solvers on random sparse matrices. Figure \ref{fig::density001} shows that Ski-LLS significantly outperforms its competitors when $A$ is moderately sparse, large and moderately over-determined.  Figure \ref{fig::all_solver_30}, Figure \ref{fig::all_solver_10_LSQR_5} and Figure \ref{fig::all_solver_10} showcase the competitiveness of Ski-LLS on sparse, large and moderately over determined problems. 
-
+For further details of computational advantages, see our paper. {\it{Hashing embeddings of optimal dimension, with applications to linear least squares
+C. Cartis, J. Fiala and Z. Shao (in preparation) 2021}}. Also see our conference paper \cite{Zhen:ICML}.
 
 \section{Installing Ski-LLS}
-\subsection{Dependency}
-\subsection{Installation instruction}
-	\subsubsection{Optional tuning of FFTW}
-		(DRAFT ONLY)\\
-		If one does not wish to use FFTW wisdom:
+Ski-LLS is available at __ with the BSD license. Please follow the following installation instruction after downloading the package. 
+\subsection{Installing dependencies}
+Ski-LLS relies on the following packages: LAPACK, SuiteSparse, FFTW, and BOOST C++ library. 
+
+\paragraph{Using the vanilla version of LAPACK}
+If the user wishes to use the vanilla version of LAPACK,
+\begin{enumerate}
+    \item LAPACK installation. First download and unpack the LAPACK.
+        \begin{lstlisting}[breaklines=true, showstringspaces=false]
+        wget -nd https://github.com/Reference-LAPACK/lapack/archive/v3.9.0.tar.gz
+        tar -xzf v3.9.0.tar.gz
+        cd lapack-3.9.0
+        \end{lstlisting}
+    Then, compile the LAPACK with (modified) make configuration as to Ski-LLS uses 64 bits integers. First make a copy of the default configuration
+        \begin{lstlisting}[breaklines=true, showstringspaces=false]
+        cp make.inc.example make.inc
+        \end{lstlisting}
+    Then, go to the make.inc file and change the values of the following three variables
+        \begin{lstlisting}[breaklines=true, showstringspaces=false]
+        CFLAGS = -O3 -fPIC
+        FFLAGS = -O2 -frecursive -fPIC -fdefault-integer-8
+        FFLAGS_NOOPT = -O0 -frecursive -fPIC -fdefault-integer-8
+        \end{lstlisting}
+    Lastly, compile LAPACK
+        \begin{lstlisting}[breaklines=true, showstringspaces=false]
+        make -j 20 blaslib lapacklib 
+        \end{lstlisting}
+    This should generate two libraries: lapack-3.9.0/liblapack.a librefblas.a. Please set the LAPACKROOT macro variable in config/make_gcc.inc to the installation directory, e.g.
+        \begin{lstlisting}[breaklines=true, showstringspaces=false]
+        LAPACKROOT ?= /fserver/zhens/testInstall/Dependencies/lapack-3.9.0
+        \end{lstlisting}
+    It is highly recommended to use tuned libraries to your system/architecture (e.g. the Intel MKL) to achieve a good performance. See later instruction on how to use the Intel MKL with Ski-LLS.
+    
+    \item SuiteSparse installation. First download and unpack SuiteSparse
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    wget -nd https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v5.6.0.tar.gz
+    tar -xzf v5.6.0.tar.gz
+    cd SuiteSparse-5.6.0
+    \end{lstlisting}
+    Then compile SuiteSparse by typing (the single command)
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    make CC=gcc CXX=g++ BLAS="/fserver/zhens/testInstall/Dependencies/lapack-3.9.0/librefblas.a -lgfortran" LAPACK=/fserver/zhens/testInstall/Dependencies/lapack-3.9.0/liblapack.a CHOLMOD_CONFIG=-DLONGBLAS=long UMFPACK_CONFIG=-DLONGBLAS=long 
+    \end{lstlisting}
+    , where the variables BLAS and LAPACK above should be changed to reflect the user's installation location of LAPACK. After successfully installing SuiteSparse, set the variable SUITSPARSEROOT in config/make_gcc.inc to the installation directory, e.g. 
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    SUITSPARSEROOT ?= /fserver/zhens/testInstall/Dependencies/SuiteSparse-5.6.0/
+    \end{lstlisting}
+    Lastly tell the linker where to find the shared library. If you are using bash shell,
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:$PWD/lib"
+    \end{lstlisting}
+    ; and if you are using csh shell,
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$PWD/lib" 
+    \end{lstlisting}
+    
+    \item FFTW installation. Download, unpack and compile FFTW
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    wget -nd http://www.fftw.org/fftw-3.3.8.tar.gz
+    tar -xzf fftw-3.3.8.tar.gz
+    cd fftw-3.3.8
+    configure
+    make
+    \end{lstlisting}
+    Then set FFTWROOT in config/make_gcc.inc to the installation directory, e.g. 
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    FFTWROOT ?= /fserver/zhens/testInstall/Dependencies/fftw-3.3.8/
+    \end{lstlisting}
+    
+    \item BOOST C++ library installation. BOOST C++ library is a header only library, therefore does not require compilation. Download and unpack BOOST C++ library by
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    wget -nd https://boostorg.jfrog.io/artifactory/main/release/1.72.0/source/boost_1_72_0.tar.gz
+    tar -xzf boost_1_72_0.tar.gz
+    \end{lstlisting}
+    Then set BOOSTROOT in config/make_gcc.inc to the correct location, e.g.
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    BOOSTROOT ?= /fserver/zhens/testInstall/Dependencies/boost_1_72_0/
+    \end{lstlisting}
+\end{enumerate}
+
+\paragraph{Using a highly tuned version of LAPACK, such as Intel MKL}
+If the user wishes to use the LAPACK comes with Intel MKL (or similarly other compiled LAPACK library, in which case the following instruction will needs to be adapted),
+\begin{enumerate}
+    \item Check that the environmental variable \$MKLROOT is set in your shell. This typically requires a command such as 
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    source /fserver/intel/opt/intel/compilers_and_libraries_2019.1.144/linux/bin/compilervars.sh intel64
+    \end{lstlisting}
+    \item Install SuiteSparse. Download and unpack SuiteSparse as before, but compiling the package with the MKL library by using
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    make CC=icc CXX=icc BLAS="-L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl" LAPACK="" CHOLMOD_CONFIG=-DLONGBLAS=long UMFPACK_CONFIG=-DLONGBLAS=long
+    \end{lstlisting}
+    Set SUITSPARSEROOT in config/make_intel.inc, and LD_LIBRARY_PATH, similarly as before. 
+    
+    \item Install FFTW and BOOST C++ library as before. Set FFTWROOT and BOOSTROOT in config/make_intel.inc similarly as before.
+\end{enumerate}
+
+\subsection{Install and test Ski-LLS}
+
+\paragraph{Assuming the vanilla version of LAPACK is installed and set}
+When in the top-level directory of the Ski-LLS package, type
+\begin{lstlisting}[breaklines=true, showstringspaces=false]
+make lib
+\end{lstlisting}
+to install the Ski-LLS package. 
+
+To test the installation, type
+\begin{lstlisting}[breaklines=true, showstringspaces=false]
+make test
+\end{lstlisting}
+This will test all the three solvers in Ski-LLS, along with other solvers that are compared in our paper. 
+
+To compile and test the minimal working example of solvers provided in Ski-LLS, type
+\begin{lstlisting}[breaklines=true, showstringspaces=false]
+make example
+\end{lstlisting}
+This will compile the two example files in test/, and run them.
+
+\paragraph{Assuming the Intel MKL version of LAPACK is installed and set}
+In this case, to install Ski-LLS, type
+\begin{lstlisting}[breaklines=true, showstringspaces=false]
+make CONFIG=config/make_intel.inc lib
+\end{lstlisting}
+To test the installation, type
+\begin{lstlisting}[breaklines=true, showstringspaces=false]
+make CONFIG=config/make_intel.inc test
+\end{lstlisting}
+And to compile and test the minimal working example of solvers in Ski-LLS, type
+\begin{lstlisting}[breaklines=true, showstringspaces=false]
+make CONFIG=config/make_intel.inc example
+\end{lstlisting}
+
+\subsection{Optional tuning of FFTW}
+Using FFTW wisdom means pre-tuning FFTW for better performance. Note that this does not affect the sparse solver in Ski-LLS.
+If one does not wish to use FFTW wisdom:
 		\begin{enumerate}
-			\item Put the wisdom argument=0 whenever present, in the solver routine. This does not affect compilation. 
+			\item Put the wisdom argument=0 whenever present (see the next section), in the solver routine. This does not affect compilation. By default, the package does not assume FFTW wisdom is built and therefore sets the macro WISDOM=0 in /include/bench_config.hpp.
 		\end{enumerate}
 If one wishes to use FFTW wisdom:
 \begin{enumerate}
 		\item Config.hpp has two macros, FFTW\_TIMES, FFTW\_QUANT, that will be used for \\ test\/build\_fftw\_wisdom.cpp. The build\_fftw\_wisdom will try executing fftw with input sizes = linspace( FFTW\_QUANT, FFTW\_QUANT*FFTW\_TIMES, FFTW\_QUANT), where linspace(start, finish, step) is a linear space.
 	\item The user then needs to compile build_fftw_wisdom using the Makefile in test/. 
-	\item After compilation, build_fftw_wisdom.out accepts two arguments: ( 0 | 1 | 2 | 3 , string), where the first argument is calibration level with 0 being the lowest and 3 being the highest, the second argument is the directory path to the generated wisdom file. 
+	\item After compilation, build_fftw_wisdom.out accepts two arguments: ( 0 | 1 | 2 | 3 , string), where the first argument is the calibration level with 0 being the lowest and 3 being the highest, the second argument is the directory path to the generated wisdom file. 
 	\item Then, the user needs to go back to Config.hpp, put the path of the generated wisdom file into the macro FFTW_WISDOM_FILE, and define FFTW_WISDOM_FLAG by \\
 	 | f==0	= FFTW_ESTIMATE \\
 	 | f==1	= FFTW_MEASURE \\
@@ -93,19 +193,17 @@ If one wishes to use FFTW wisdom:
 	 | f==3 	= FFTW_EXHAUSTIVE \\
 		where f = first argument given to build_fftw_wisdom.out in Step 3. 
 	
-	\item Set the wisdom argument=1 whenever present. This does not affect compilation.
+	\item Set the wisdom argument=1 whenever present.
 	\end{enumerate}
-
-\subsection{Test the installation}
 
 \section{Using Ski-LLS}
 
 This is a library of three routines for solving problem \eqref{eq::problem}. 
 
 \begin{itemize}
-	\item If the matrix $A$ is dense, {\it ls_dense_hashing_blendenpik} uses LSQR with a preconditioner built from a sketch of the matrix $A$ using Hashed-Randomised-Hadamard-Transform (HRHT) and Randomised-Column-Pivoted-QR (RCPQR) to solve \eqref{eq::problem}.
+	\item If the matrix $A$ is dense, {\it ls_dense_hashing_blendenpik} uses LSQR with a preconditioner built from a sketch of the matrix $A$ using Hashed-Randomised-Discrete-Hartley-Transform (HR-DHT) and Randomised-Column-Pivoted-QR (R-CPQR) to solve \eqref{eq::problem}.
 
-	\item If $A$ is dense and has full numerical rank, {\it ls_dense_hashing_blendenpik_noCPQR} uses LSQR with a preconditioner built from a sketch of the matrix $A$ using HRHT and Column-Pivoted-QR (CPQR) to solve \eqref{eq::problem}.
+	\item If $A$ is dense and has full numerical rank, {\it ls_dense_hashing_blendenpik_noCPQR} uses LSQR with a preconditioner built from a sketch of the matrix $A$ using HR-DHT and Column-Pivoted-QR (CPQR) to solve \eqref{eq::problem}.
 
 	\item   If $A$ is sparse, {\it ls_sparse_spqr} uses LSQR with a preconditioner built from a sketch of the matrix $A$ using $s-$hashing and sparse QR (SPQR) to solve \eqref{eq::problem}.
 \end{itemize}
@@ -120,90 +218,7 @@ These classes are defined in include/Vec.hpp and include/impl/Mat.hpp respective
 
 
 \paragraph{Sparse Matrix}
-Ski-LLS uses Compressed Column Data C structure for sparse matrices and vectors. The sparse data structure is from SuiteSparse \cite{10.1145/2049662.2049670}. The cs_dl and cholmod_sparse structures are defined in cs.h and cholmod_core.h respectively the in SuiteSparse/include folder. 
-
-
-
-% In particular, the cs_dl structure used as the input matrix format for sparse linear least squares is taken from the CXSparse package from SuiteSparse. It is a C structure with 7 fields: 
-
-% \begin{itemize}
-% 	\setlength\itemsep{-0.5em}
-% 	\item nzmax: maximum number of non-zeros. 
-
-% 	\item m: number of rows. 
-
-% 	\item n: number of columns. 
-
-% 	\item *p: column indices (size nzmax)
-
-% 	\item *i: row indices, size nzmax. 
-
-% 	\item *x: numerical values of non-zeros, size nzmax. 
-
-% 	\item nz: -1 for compressed column format. 
-% \end{itemize}
-
-% Sometimes we will also use the data structure cholmod_sparse for sparse matrix in compressed column format. It has a similar structures. For more information, see the header file or documentation of SuiteSparse.
-
-% \paragraph{Examples}
-
-% We give two examples of constructing dense and sparse matrices from user given data. 
-
-% The below code snippet creates a dense matrix and a vector.
-
-% \begin{lstlisting}
-% 	long m = 4;
-% 	long n = 2;
-% 	double data_A[8] = {0.306051,-1.53078,1.64493,-1.61322,
-% 		-0.2829,0.474476,-0.586278,-0.610202};
-
-% 	double data_b[4] = {0.0649338,0.845946,-0.0164085,0.247119};
-
-% 	Mat_d A(m,n,data_A);
-% 	Vec_d b(m,data_b);
-% \end{lstlisting}
-
-% The below code snippet creates a sparse matrix.
-
-% \begin{lstlisting}
-%     long m = 4;
-%     long n = 3;
-%     long nnz = 5;
-
-%     long col[4] = {1,  2,  4,  6};
-%     long row[5] = {1,  1,  3,  2,  4}; 
-%     double val[5] = {2.0,  3.0,  1.0,  4.0,  5.0};
-%     long col_0[4];
-%     long row_0[5];
-
-%     // convert to zero based indices
-%     for (long i=0; i<n+1; i++){
-%      col_0[i] = col[i]-1;
-%     }
-
-%     for (long i =0; i<nnz; i++){
-%      row_0[i] = row[i]-1;
-%     }
-
-%     cholmod_common Common, *cc;
-%     cc = &Common;
-%     cholmod_l_start(cc);
-%     cc->print = 4;
-
-%     cholmod_sparse* A;
-%     A = cholmod_l_allocate_sparse(
-%     m, n, nnz, true, true, 0, CHOLMOD_REAL, cc);
-
-%     A->p = col_0;
-%     A->i = row_0;
-%     A->x = val;
-
-%     cholmod_l_print_sparse( A, "A", cc);
-
-%     cholmod_l_finish(cc);
-% \end{lstlisting}
-
-
+Ski-LLS uses the Compressed Column data structure for sparse matrices and vectors. The sparse data structure is from SuiteSparse \cite{Davis:2011ft}. The cs_dl and cholmod_sparse structures are defined in cs.h and cholmod_core.h respectively in SuiteSparse/include folder. 
 
 
 
@@ -218,13 +233,13 @@ ls_dense_hashing_blendenpik(A, b, x, rank, flag, it, gamma, k, abs_tol, rcond, i
 	\setlength\itemsep{-0.5em}
 	\item Inputs 
 		\begin{enumerate}
-			\item $\mathbf A$ is type Mat_d containing a $\R^{m\times n}$ matrix defined in \eqref{eq::problem}.
-			\item $\mathbf b$ is type Vec_d containing a $\R^m$ vector defined in \eqref{eq::problem}.
+			\item $\mathbf A$ is type Mat_d containing a $\R^{n \times d}$ matrix defined in \eqref{eq::problem}.
+			\item $\mathbf b$ is type Vec_d containing a $\R^n$ vector defined in \eqref{eq::problem}.
 		\end{enumerate}
 	
 	\item Main Outputs
 		\begin{enumerate}
-			\item { $\mathbf x$} is type Vec_d containing a $\R^n$ vector which is a solution of \eqref{eq::problem}.
+			\item { $\mathbf x$} is type Vec_d containing a $\R^d$ vector which is a solution of \eqref{eq::problem}.
 		\end{enumerate}
 
 	\item Auxillary Outputs
@@ -239,25 +254,27 @@ ls_dense_hashing_blendenpik(A, b, x, rank, flag, it, gamma, k, abs_tol, rcond, i
 		\begin{enumerate}
 			\item {\bf gamma} is the over-sampling ratio used in sketching. Bigger gamma typically gives higher quality preconditioner but slower running time. The default value of gamma is $1.7$.
 
-			\item $\mathbf k$ is number of non-zeros per column in the hashing matrix as part of sketching. Bigger $k$ typically gives higher quality preconditioner but slower running time. The default value of $k$ is 1. 
+			\item $\mathbf k$ is the number of non-zeros per column in the hashing matrix as part of sketching. Bigger $k$ typically gives higher quality preconditioner but slower running time. The default value of $k$ is 1. 
 
-			\item {\bf abs_tol} specifies an absolute residual tolerance for the solution $x$ of \ref{eq::problem}. If the algorithm finds an $x$ satisfies $\|Ax-b\|_2 \leq abs_tol$, it terminates and returns $x$. The default value is $10^{-8}$
+			\item {\bf abs_tol} specifies an absolute residual tolerance for the solution $x$ of \ref{eq::problem}. If the algorithm finds an $x$ satisfies $\|Ax-b\|_2 \leq abs_{tol}$, it terminates and returns $x$. The default value is $10^{-8}$
 
-			\item {\bf it_tol} specifies the relative residual tolerance for LSQR convergence, see \cite{Paige:1982aa}. The default value is $10^{-6}$.
+			\item {\bf it_tol} specifies the relative residual tolerance for LSQR convergence. The default value is $10^{-6}$.
+			
+			\item {\bf rcond} (default value is $10^{-12})$, which is a parameter used
 
 			 \item {\bf max_it} specifies the maximum iteration of LSQR, the default value is $10,000$. 
 
 
 			 \item {\bf debug} is a flag. If debug=1, the solver prints additional outputs for diagosis. 
 
-			 \item {\bf wisdom} is a flag. If wisdom=1, the macro variable FFTW_WISDOM_FILE in inclde/Config.hpp must be defined as the path to a FFTW wisdom file, see fftw documentation at fftw.org. If wisdom=0, the solver does not use FFTW wisdom and may run slower. 
+			 \item {\bf wisdom} is a flag. If wisdom=1, the macro variable FFTW_WISDOM_FILE in inclde/Config.hpp must be defined as the path to a FFTW wisdom file, see fftw documentation at fftw.org. If wisdom=0, the solver does not use FFTW wisdom and may run slower. Also see the installation section.
 		\end{enumerate}
 		
 
 	\end{itemize}
 
 
-If the matrix $A$ is known to be of full numerical rank, then a different routine can be used which is slightly faster:
+If the matrix $A$ is known to be of full numerical rank, then a different routine can be used which is faster:
 
 ls_dense_hashing_blendenpik_noCPQR(A, b, x, rank, flag, it, gamma, k, it_tol, max_it, debug, wisdom). The arguments usage is the same as above, but we don't need the rank-detection parameter rcond, and the shortcut related to abs_tol is not implemented.
 
@@ -279,7 +296,7 @@ b = \begin{pmatrix}
 \end{pmatrix}.
 \end{equation}
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true, showstringspaces=false]
 #include <iostream>
 #include "ski-lls.h" 
 
@@ -344,13 +361,13 @@ ls_sparse_spqr(*A, b, x,
 	\setlength\itemsep{-0.5em}
 	\item Inputs 
 		\begin{enumerate}
-			\item $\mathbf A$ is pointer to type cs_dl containing a $\R^{m\times n}$ sparse matrix defined in \eqref{eq::problem}.
-			\item $\mathbf b$ is type Vec_d containing a $\R^m$ vector defined in \eqref{eq::problem}.
+			\item $\mathbf A$ is pointer to type cs_dl containing a $\R^{n \times d}$ sparse matrix defined in \eqref{eq::problem}.
+			\item $\mathbf b$ is type Vec_d containing a $\R^n$ vector defined in \eqref{eq::problem}.
 		\end{enumerate}
 	
 	\item Main Outputs
 		\begin{enumerate}
-			\item {$\mathbf x$} is type Vec_d containing a $\R^n$ vector which is a solution of \eqref{eq::problem}.
+			\item {$\mathbf x$} is type Vec_d containing a $\R^d$ vector which is a solution of \eqref{eq::problem}.
 		\end{enumerate}
 
 	\item Auxillary Outputs
@@ -363,21 +380,22 @@ ls_sparse_spqr(*A, b, x,
 
 	\item Parameters
 		\begin{enumerate}
-			\item {\bf gamma} is the over-sampling ratio used in sketching. Bigger gamma typically gives higher quality preconditioner but slower running time. The default value of gamma is $1.7$.
+			\item {\bf gamma} is the over-sampling ratio used in sketching. Bigger gamma typically gives higher quality preconditioner but slower running time. The default value of gamma is $1.4$.
 
-			\item $\mathbf k$ is number of non-zeros per column in the hashing matrix as part of sketching. Bigger $k$ typically gives higher quality preconditioner but slower running time. The default value of $k$ is 1. 
+			\item $\mathbf k$ is the number of non-zeros per column in the hashing matrix as part of sketching. Bigger $k$ typically gives higher quality preconditioner but slower running time. The default value of $k$ is 2. 
 
-			\item {\bf abs_tol} specifies an absolute residual tolerance for the solution $x$ of \ref{eq::problem}. If the algorithm finds an $x$ satisfies $\|Ax-b\|_2 \leq abs_tol$, it terminates and returns $x$. The default value is $10^{-8}$
+			\item {\bf abs_tol} specifies an absolute residual tolerance for the solution $x$ of \ref{eq::problem}. If the algorithm finds an $x$ satisfies $\|Ax-b\|_2 \leq abs_{tol}$, it terminates and returns $x$. The default value is $10^{-8}$
 
-			\item {\bf ordering} is an integer specifying a fill-reduced ordering for sparse QR factorization. The default value is {SPQR_ORDERING_DEFAULT}. See SuiteSparseQR documentation for more information. 
+			\item {\bf ordering} is an integer specifying a fill-reduced ordering for sparse QR factorization. The default value is 2. See SuiteSparseQR documentation for more information. 
 
-			\item {\bf it_tol} specifies the relative residual tolerance for LSQR convergence, see \cite{Paige:1982aa}. The default value is $10^{-6}$.
+			\item {\bf it_tol} specifies the relative residual tolerance for LSQR convergence. The default value is $10^{-6}$.
+			
 
 			\item {\bf max_it} specifies the maximum iteration of LSQR, the default value is $10,000$. 
 
 			\item {\bf rcond} is numerical-ill-conditioning tolerance for the preconditioner returned by sparse QR. If the condition number of the preconditioner is larger than $1/rcond$, a warning will be printed. The default value of rcond is $10^{-12}$
 
-			\item {\bf perturb} is a real number. It has no-effect on the algorithm and is part of an ongoing development. 
+			\item {\bf perturb} is a real number. When the preconditioner returned by sparse QR is ill conditioned as defined by rcond, any computation with the preconditioner is perturbed (details see our paper) by perturb. The default value is $10^{-10}$. 
 
 			\item {\bf debug} is a flag. If debug=1, the solver prints additional outputs for diagosis. 
 		\end{enumerate}
@@ -403,7 +421,7 @@ b = \begin{pmatrix}
 \end{pmatrix}.
 \end{equation}
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true, showstringspaces=false]
 #include <iostream>
 #include "ski-lls.h"
 
@@ -473,27 +491,6 @@ int main(int argc, char **argv)
 \bibliographystyle{abbrv}
 
 \appendix
-
-\section{Numerical Results}
-\begin{table}[H]
-\scriptsize
-\centering
-\begin{tabular}{l|rrrrrrr}
-               & lp\_ship12l                          & Franz1               & GL7d26                                & cis-n4c6-b2          & lp\_modszk1                           & rel5                                  & ch5-5-b1              \\ 
-\hline
-SVD          & 18.336                               & 26.503               & 50.875                                & 6.1E-14              & 33.236                                & 14.020                                & 7.3194                \\
-Blendenpk      & \multicolumn{1}{l}{~~~~~~~~~NaN~~~~} & 9730.700             & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & 3.0E+02              & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & 340.9200              \\
-Ski-LLS-dense  & 18.336                               & 26.503               & 50.875                                & 5.3E-14              & 33.236                                & 14.020                                & 7.3194                \\
-               & \multicolumn{1}{l}{}                 & \multicolumn{1}{l}{} & \multicolumn{1}{l}{}                  & \multicolumn{1}{l}{} & \multicolumn{1}{l}{}                  & \multicolumn{1}{l}{}                  & \multicolumn{1}{l}{}  \\
-               & n3c5-b2                              & ch4-4-b1             & n3c5-b1                               & n3c4-b1              & connectus                             & landmark                              & cis-n4c6-b3           \\ 
-\hline
-SVD            & 9.0E-15                              & 4.2328               & 3.4641                                & 1.8257               & 282.67                                & 1.1E-05                               & 30.996                \\
-Blendenpk      & 1.3E+02                              & 66.9330              & 409.8000                              & 8.9443               & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & 3756.200              \\
-Ski-LLS-dense  & 5.2E-15                              & 4.2328               & 3.4641                                & 1.8257               & 282.67                                & 1.1E-05                               & 30.996               
-\end{tabular}
-\caption{Residual of solvers for a range of approximate rank-deficient problems taken from the Florida matrix collection \cite{10.1145/2049662.2049663}. We see while Blendenpik struggles, Ski-LLS achives the same residual accuracy as SVD method.}
-\label{tab::rank_def_accuracy}
-\end{table}
 
 
 
