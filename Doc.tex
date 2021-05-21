@@ -15,26 +15,26 @@
 
 \begin{document}
 
-\title{Computing Large Scale Linear Least Squares with SKiLLS}
+\title{Computing Large Scale Linear Least Squares with Ski-LLS}
 
 \author{Zhen Shao}\maketitle
 
 \section{Overview}
 
-SKiLLS (SKetchIng-Linear-Least-Sqaures) is a C++ package for finding solutions to over-determined linear least square problems. SKiLLS uses a modern dimensionality reduction technique called sketching, and is particularly suited for large scale linear least squares where the number of measurements/observations is far greater than the number of variables. 
+Ski-LLS (SKetchIng-Linear-Least-Sqaures) is a C++ package for finding solutions to over-determined linear least square problems. Ski-LLS uses a modern dimensionality reduction technique called sketching, and is particularly suited for large scale linear least squares where the number of measurements/observations is far greater than the number of variables. 
 
-Mathematically, SkiLLS solves
+Mathematically, Ski-LLS solves
 
 \begin{align}
 \min_{x \in \R^{d}} f(x): = \|Ax - b\|_2^2, \label{eq::problem}
 \end{align}
 where $A \in \R^{n\times d}$ and $b \in \R^{n}$ given. The matrix $A$ is allowed to be rank-deficient or nearly rank-deficient. 
 
-\subsection{When to use SKiLLS}
+\subsection{When to use Ski-LLS}
 
 If $A$ in \eqref{eq::problem} is dense, the state-of-the-art sketching solver is Blendenpik \cite{doi:10.1137/090767911}. Comparing to solvers in the classical state-of-the-art numerical package LAPACK \cite{laug}, Blendenpik is two times faster on matrices of size $20,000 \times 500$ and four times faster on matrices of size $100,000 \times 2500$. Comparing to classical iterative solver LSQR \cite{Paige:1982aa}, Blendenpik is 80 times faster on matrices of size $20,000 \times 1,000$ with condition number $100$. 
 
-Blendenpik only solves \eqref{eq::problem} when the matrix $A$ has full numerical rank, as illustrated in Table \ref{tab::rank_def_accuracy}. Two solvers are included in the library SKiLLS for dense $A$. The robust version, \\{\it{ls_dense_hashing_blendenpik} }solves problems \ref{eq::problem} when $A$ is numecially rank-deficient but is as fast as Blendenpik when $A$ has full rank (takes 70\% to 130\% time on matrices of different sizes). The fast version, {\it{ls_dense_hashing_blendenpik_noCPQR}} is 1.6 times faster than Blendenpik on coherent matrices\footnote{Matrices of the form $A \in \R^{n\times d} = \bigl(\begin{smallmatrix} I_{d\times d} \\ 0  \end{smallmatrix}\bigr) + 10^{-8}J_{n,d} $ where $J_{n,d} \in \R^{n \times d}$ is a matrix of all ones.} of size $40,000 \times 4,000$ and $90,000 \times 2250$, and slightly faster than Blendenpik on other types of input (about 1.1 times faster).
+Blendenpik only solves \eqref{eq::problem} when the matrix $A$ has full numerical rank, as illustrated in Table \ref{tab::rank_def_accuracy}. Two solvers are included in the library Ski-LLS for dense $A$. The robust version, \\{\it{ls_dense_hashing_blendenpik} }solves problems \ref{eq::problem} when $A$ is numecially rank-deficient but is as fast as Blendenpik when $A$ has full rank (takes 70\% to 130\% time on matrices of different sizes). The fast version, {\it{ls_dense_hashing_blendenpik_noCPQR}} is 1.6 times faster than Blendenpik on coherent matrices\footnote{Matrices of the form $A \in \R^{n\times d} = \bigl(\begin{smallmatrix} I_{d\times d} \\ 0  \end{smallmatrix}\bigr) + 10^{-8}J_{n,d} $ where $J_{n,d} \in \R^{n \times d}$ is a matrix of all ones.} of size $40,000 \times 4,000$ and $90,000 \times 2250$, and slightly faster than Blendenpik on other types of input (about 1.1 times faster).
 
 If $A$ in \eqref{eq::problem} is sparse, the state-of-the-art solvers are SPQR \cite{Davis:2011ft} and HSL \cite{Scott:2014iq}, which uses sparse QR factorization of $A$ and LSQR with an incomplete Cholesky preconditioner, respectively. Our library has a single sparse solver, {\it ls_sparse_spqr}. It significantly outperforms both state-of-the-art sparse solvers on large random sparse ill-conditioned matrices. It is 10 times faster than HSL and 7 times faster than SPQR on $120,000 \times 5,000$ random sparse matrices with $1\%$ non-zero entries and condition number equals to $10^6$. And it is 3 times faster than both HSL and SPQR on $40,000 \times 2,000$ matrices with $1\%$ non-zero entries and condition number equals to $10^6$.
 
@@ -42,10 +42,10 @@ Our sparse solver also performs extremely well on highly over-determined sparse 
 
 Because sketching exploits redundancy of rows, the performance gain compared to non-sketching solvers\footnote{LAPACK, HSL, SPQR} will be larger on $A$ with larger $n/d$ radio.
 
-For further details of computational advantages, see our paper. {\it{Computing Large Scale Linear Least Squares with SKiLLS, C. Cartis and Z. Shao}}.
+For further details of computational advantages, see our paper. {\it{Computing Large Scale Linear Least Squares with Ski-LLS, C. Cartis and Z. Shao}}.
 
 
-% Problem \eqref{eq::problem} frequently appears as a sub-problem in many computational and data science problems, for example, in many non-linear/general function minimisation routine linearises the problem and iteratively solve problems of the form \eqref{eq::problem}. In the following situations using SKiLLS yields significant computational advantage comparing to state-of-the-arts\footnote{Blendenpik \cite{doi:10.1137/090767911} for dense problems, SPQR \cite{Davis:2011ft} and Cholesky-preconditioned LSQR \cite{Scott:2014iq} for sparse problems}:
+% Problem \eqref{eq::problem} frequently appears as a sub-problem in many computational and data science problems, for example, in many non-linear/general function minimisation routine linearises the problem and iteratively solve problems of the form \eqref{eq::problem}. In the following situations using Ski-LLS yields significant computational advantage comparing to state-of-the-arts\footnote{Blendenpik \cite{doi:10.1137/090767911} for dense problems, SPQR \cite{Davis:2011ft} and Cholesky-preconditioned LSQR \cite{Scott:2014iq} for sparse problems}:
 
 % {\color{red} Begin with LAPACK, and give individual data point about how faster we are comparing to Blendenpik, set expectations about the smallest dimensions and over-determinancy ratio. }
 % \begin{enumerate}\setlength{\itemsep}{-2pt}
@@ -59,7 +59,7 @@ For further details of computational advantages, see our paper. {\it{Computing L
 
 % \end{enumerate}
 
-% In the following situations using SKiLLS is competitive with state-of-the-arts
+% In the following situations using Ski-LLS is competitive with state-of-the-arts
 
 % \begin{enumerate}\setlength{\itemsep}{-2pt}
 % 	\item $A$ is dense, large, sufficiently over-determined with full rank. 
@@ -67,17 +67,38 @@ For further details of computational advantages, see our paper. {\it{Computing L
 % 	\item $A$ is sparse, large, moderately over-determined. 
 % \end{enumerate}
 
-% Table \ref{tab::rank_def_accuracy} shows that SKiLLS is more robust than Blendenpik when the matrix $A$ is approximately rank-deficient. Figure \ref{fig::compare_blen_coherent} shows that SKiLLS outperforms Blendenpik when the matrix $A$ is (full rank) with high coherence. Figrue \ref{fig::compare_blen_semi-coherent} and Figure \ref{fig::compare_blen_incoherent} shows that SKiLLS is competitive with Blendenpik when the matrix $A$ is (full rank). 
+% Table \ref{tab::rank_def_accuracy} shows that Ski-LLS is more robust than Blendenpik when the matrix $A$ is approximately rank-deficient. Figure \ref{fig::compare_blen_coherent} shows that Ski-LLS outperforms Blendenpik when the matrix $A$ is (full rank) with high coherence. Figrue \ref{fig::compare_blen_semi-coherent} and Figure \ref{fig::compare_blen_incoherent} shows that Ski-LLS is competitive with Blendenpik when the matrix $A$ is (full rank). 
 
-% Figure \ref{fig::sparse_rand} shows that SKiLLS runs more than 10 times faster than current state-of-the-art sparse solvers on random sparse matrices. Figure \ref{fig::density001} shows that SKiLLS significantly outperforms its competitors when $A$ is moderately sparse, large and moderately over-determined.  Figure \ref{fig::all_solver_30}, Figure \ref{fig::all_solver_10_LSQR_5} and Figure \ref{fig::all_solver_10} showcase the competitiveness of SKiLLS on sparse, large and moderately over determined problems. 
+% Figure \ref{fig::sparse_rand} shows that Ski-LLS runs more than 10 times faster than current state-of-the-art sparse solvers on random sparse matrices. Figure \ref{fig::density001} shows that Ski-LLS significantly outperforms its competitors when $A$ is moderately sparse, large and moderately over-determined.  Figure \ref{fig::all_solver_30}, Figure \ref{fig::all_solver_10_LSQR_5} and Figure \ref{fig::all_solver_10} showcase the competitiveness of Ski-LLS on sparse, large and moderately over determined problems. 
 
 
-\section{Installing SKiLLS}
+\section{Installing Ski-LLS}
 \subsection{Dependency}
 \subsection{Installation instruction}
+	\subsubsection{Optional tuning of FFTW}
+		(DRAFT ONLY)\\
+		If one does not wish to use FFTW wisdom:
+		\begin{enumerate}
+			\item Put the wisdom argument=0 whenever present, in the solver routine. This does not affect compilation. 
+		\end{enumerate}
+If one wishes to use FFTW wisdom:
+\begin{enumerate}
+		\item Config.hpp has two macros, FFTW\_TIMES, FFTW\_QUANT, that will be used for \\ test\/build\_fftw\_wisdom.cpp. The build\_fftw\_wisdom will try executing fftw with input sizes = linspace( FFTW\_QUANT, FFTW\_QUANT*FFTW\_TIMES, FFTW\_QUANT), where linspace(start, finish, step) is a linear space.
+	\item The user then needs to compile build_fftw_wisdom using the Makefile in test/. 
+	\item After compilation, build_fftw_wisdom.out accepts two arguments: ( 0 | 1 | 2 | 3 , string), where the first argument is calibration level with 0 being the lowest and 3 being the highest, the second argument is the directory path to the generated wisdom file. 
+	\item Then, the user needs to go back to Config.hpp, put the path of the generated wisdom file into the macro FFTW_WISDOM_FILE, and define FFTW_WISDOM_FLAG by \\
+	 | f==0	= FFTW_ESTIMATE \\
+	 | f==1	= FFTW_MEASURE \\
+	 | f==2	= FFTW_PATIENT \\
+	 | f==3 	= FFTW_EXHAUSTIVE \\
+		where f = first argument given to build_fftw_wisdom.out in Step 3. 
+	
+	\item Set the wisdom argument=1 whenever present. This does not affect compilation.
+	\end{enumerate}
+
 \subsection{Test the installation}
 
-\section{Using SKiLLS}
+\section{Using Ski-LLS}
 
 This is a library of three routines for solving problem \eqref{eq::problem}. 
 
@@ -92,14 +113,14 @@ This is a library of three routines for solving problem \eqref{eq::problem}.
 \subsection{Data structure}
 
 \paragraph{Dense Vector and Matrix}
-SKiLLS uses C++ class Vec for dense vectors and C++ class Mat for dense matrices. 
+Ski-LLS uses C++ class Vec for dense vectors and C++ class Mat for dense matrices. 
 To create a $n\times 1$ vector from already existed data, take a pointer to the data and call Vec(n, *data). 
 To create a $n \times d$ matrix from already existed data, take a pointer to the data and call Mat(n, d, *data). Basic matrix operations such as return a specific row, column, or matrix-matrix and matrix vector multiplications are implemented.  
 These classes are defined in include/Vec.hpp and include/impl/Mat.hpp respectively. 
 
 
 \paragraph{Sparse Matrix}
-SKiLLS uses Compressed Column Data C structure for sparse matrices and vectors. The sparse data structure is from SuiteSparse \cite{10.1145/2049662.2049670}. The cs_dl and cholmod_sparse structures are defined in cs.h and cholmod_core.h respectively the in SuiteSparse/include folder. 
+Ski-LLS uses Compressed Column Data C structure for sparse matrices and vectors. The sparse data structure is from SuiteSparse \cite{10.1145/2049662.2049670}. The cs_dl and cholmod_sparse structures are defined in cs.h and cholmod_core.h respectively the in SuiteSparse/include folder. 
 
 
 
@@ -242,24 +263,25 @@ ls_dense_hashing_blendenpik_noCPQR(A, b, x, rank, flag, it, gamma, k, it_tol, ma
 
 \paragraph{Example}
 
-The following program solves an example of problem \eqref{eq::problem} with given $A$ and $b$. 
+The following program (test/ski-llsDenseExample.cpp) solves an example of problem \eqref{eq::problem} with given $A$ and $b$, where 
+\begin{equation}
+A = \begin{pmatrix}
+0.306051 & -1.53078 \\
+1.64493 & -1.61322 \\
+-0.2829 & 0.474476	\\
+-0.586278 & -0.610202 
+\end{pmatrix} \quad \text{and} \quad 
+b = \begin{pmatrix}
+0.0649338 \\
+0.845946 \\
+-0.0164085\\
+0.247119 & 
+\end{pmatrix}.
+\end{equation}
 
 \begin{lstlisting}
 #include <iostream>
-#include "Config.hpp"
-#include "SpMat.hpp"
-#include "Random.hpp"
-#include <math.h>
-#include "RandSolver.hpp"
-#include "cs.h"
-#include <stdio.h> 
-#include "SuiteSparseQR.hpp"
-#include "cholmod.h"
-#include "lsex_all_in_c.h"
-#include "IterSolver.hpp"
-#include <sys/timeb.h>
-#include "bench_config.hpp"
-#include "blendenpik.hpp"
+#include "ski-lls.h" 
 
 int main(int argc, char **argv)
 {
@@ -267,7 +289,7 @@ int main(int argc, char **argv)
 	long m = 4;
 	long n = 2;
 	double data_A[8] = {0.306051,-1.53078,1.64493,-1.61322,
-	-0.2829,0.474476,-0.586278,-0.610202};
+	-0.2829,0.474476,-0.586278,-0.610202}; 
 
 	double data_b[4] = {0.0649338,0.845946,-0.0164085,0.247119};
 
@@ -281,6 +303,7 @@ int main(int argc, char **argv)
 	double it_tol = IT_TOL;
 	double rcond = 1e-10;
 	int wisdom = 0;
+	int debug = 0;
 	double abs_tol = ABS_TOL;
 
 	// storage
@@ -304,6 +327,7 @@ int main(int argc, char **argv)
 	A.mv('n', 1, x, -1, b); 
 	std::cout << "Residual of ls_blendenpik_hashing is: "<<  nrm2(b) << std::endl;
 	std::cout << "Iteration of ls_blendenpik_hashing is: " << it << std::endl;
+	// The correct value is x = (-0.2122, 0.720)
 
 }
 \end{lstlisting}
@@ -363,26 +387,27 @@ ls_sparse_spqr(*A, b, x,
 
 \paragraph{Example}
 
-The following program solves an example of problem \eqref{eq::problem} with given sparse $A$ and dense $b$. 
+The following program (test/ski-llsSparseExample.cpp) solves an example of problem \eqref{eq::problem} with given sparse $A$ and dense $b$, where 
+\begin{equation}
+A = \begin{pmatrix}
+     2     & 3     & 0\\
+     0     & 0     & 4\\
+     0     & 1     & 0\\
+     0     & 0     & 5
+\end{pmatrix} \quad \text{and} \quad 
+b = \begin{pmatrix}
+0.0649338 \\
+0.845946 \\
+-0.0164085\\
+0.247119 & 
+\end{pmatrix}.
+\end{equation}
 
 \begin{lstlisting}
 #include <iostream>
-#include "Config.hpp"
-#include "SpMat.hpp"
-#include "Random.hpp"
-#include <math.h>
-#include "RandSolver.hpp"
-#include <time.h>
-#include "cs.h"
-#include <stdio.h> 
-#include "SuiteSparseQR.hpp"
-#include "cholmod.h"
-#include "lsex_all_in_c.h"
-#include "IterSolver.hpp"
-#include <sys/timeb.h>
-#include "bench_config.hpp"
+#include "ski-lls.h"
 
-int main(int argc, char const *argv[])
+int main(int argc, char **argv)
 {
 	// Create a sparse matrix in compressed column format
     long m = 4;
@@ -393,31 +418,16 @@ int main(int argc, char const *argv[])
     long row[5] = {0,  0,  2,  1,  3}; 
     double val[5] = {2.0,  3.0,  1.0,  4.0,  5.0};
 
-    cholmod_common Common, *cc;
-    cc = &Common;
-    cholmod_l_start(cc);
-    cc->print = 4;
+    cs_dl* A;
+    A = cs_dl_spalloc(m, n, nnz, 1,0 );
 
-    cholmod_sparse* A;
-    A = cholmod_l_allocate_sparse(
-    m, n, nnz, true, true, 0, CHOLMOD_REAL, cc);
-
-    A->p = col;
-    A->i = row;
-    A->x = val;
-    cholmod_l_print_sparse( A, "A", cc);
-    cholmod_l_finish(cc);
+    A->p = (long*)col;
+    A->i = (long*)row;
+    A->x = (double*)val;
 
 
-	// input
-	cs_dl *A;
-    A = to_cs_dl(Acholmod);
-
-    double *b_data = (double*)malloc((A->m)*sizeof(double));
-    for (long i=0; i<A->m; i++){
-        b_data[i] = 1;
-    }
-    Vec_d b(A->m, b_data);
+    double data_b[4] = {0.0649338,0.845946,-0.0164085,0.247119};
+    Vec_d b(m, data_b);
 
     // parameters
     long k = NNZ_PER_COLUMN;
@@ -427,6 +437,7 @@ int main(int argc, char const *argv[])
     double abs_tol = ABS_TOL;
     double rcond = 1e-12;
     int ordering = SPQR_ORDERING;
+    int debug = 0;
 
     // storage
 
@@ -436,18 +447,25 @@ int main(int argc, char const *argv[])
     double t_start;
     double t_finish;
     double residual;   
-    Vec_d x_ls_qr(A->n);
+    Vec_d x(A->n);
 
     // solve
-    ls_sparse_spqr(*A, b, x_ls_qr, 
+    ls_sparse_spqr(*A, b, x, 
     rank, flag, it, gamma, k, abs_tol, ordering, it_tol, max_it, RCOND_THRESHOLD, PERTURB, debug);
 
+    // compute residual
     CSC_Mat_d A_CSC(A->m, A->n, A->nzmax, 
         (long*)A->i, (long*)A->p, (double*)A->x);
-    A_CSC.mv('n', 1, x_ls_qr, -1, b);
+    A_CSC.mv('n', 1, x, -1, b);
+
+    std::cout << "A is: " << std::endl;
+    cs_dl_print(A,0);
+    std::cout << "b is: "<< b << std::endl;
+    std::cout << "solution is: "<< x << std::endl;
+    // Should get     x = (0.0571 -0.0164 0.1127)
 
     std::cout << "Residual of ls_sparse_spqr is: "<<  nrm2(b) << std::endl;
-	return 0;
+
 }
 \end{lstlisting}
 
@@ -473,7 +491,7 @@ SVD            & 9.0E-15                              & 4.2328               & 3
 Blendenpk      & 1.3E+02                              & 66.9330              & 409.8000                              & 8.9443               & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & \multicolumn{1}{l}{~~~~~~~~~~NaN~~~~} & 3756.200              \\
 Ski-LLS-dense  & 5.2E-15                              & 4.2328               & 3.4641                                & 1.8257               & 282.67                                & 1.1E-05                               & 30.996               
 \end{tabular}
-\caption{Residual of solvers for a range of approximate rank-deficient problems taken from the Florida matrix collection \cite{10.1145/2049662.2049663}. We see while Blendenpik struggles, SKiLLS achives the same residual accuracy as SVD method.}
+\caption{Residual of solvers for a range of approximate rank-deficient problems taken from the Florida matrix collection \cite{10.1145/2049662.2049663}. We see while Blendenpik struggles, Ski-LLS achives the same residual accuracy as SVD method.}
 \label{tab::rank_def_accuracy}
 \end{table}
 
