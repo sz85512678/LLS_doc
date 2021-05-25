@@ -15,7 +15,7 @@
 
 \begin{document}
 
-\title{Computing Large Scale Linear Least Squares with Ski-LLS}
+\title{Solving Large Scale Linear Least Squares with Ski-LLS}
 
 \author{Zhen Shao}\maketitle
 
@@ -32,9 +32,9 @@ where $A \in \R^{n\times d}$ and $b \in \R^{n}$ given. The matrix $A$ is allowed
 
 \subsection{When to use Ski-LLS}
 
-If $A$ in \eqref{eq::problem} is dense, the state-of-the-art sketching solver is Blendenpik \cite{doi:10.1137/090767911}. Comparing to solvers in the classical state-of-the-art numerical package LAPACK \cite{laug}, Blendenpik is two times faster on matrices of size $20,000 \times 500$ and four times faster on matrices of size $100,000 \times 2500$. Comparing to classical iterative solver LSQR \cite{Paige:1982aa}, Blendenpik is 80 times faster on matrices of size $20,000 \times 1,000$ with condition number $100$. However, Blendenpik only solves \eqref{eq::problem} when the matrix $A$ is dense, and has full numerical rank. Ski-LLS improves upon Blendenpik on both robustness and speed. Two solvers are included in the library Ski-LLS for dense $A$. The robust version, \\{\it{ls_dense_hashing_blendenpik} }solves problems \eqref{eq::problem} when $A$ is numerically rank-deficient but is as fast as Blendenpik when $A$ has full rank (takes 70\% to 130\% time on matrices of different sizes). The fast version, {\it{ls_dense_hashing_blendenpik_noCPQR}} is 1.6 times faster than Blendenpik on coherent matrices\footnote{Matrices of the form $A \in \R^{n\times d} = \bigl(\begin{smallmatrix} I_{d\times d} \\ 0  \end{smallmatrix}\bigr) + 10^{-8}J_{n,d} $ where $J_{n,d} \in \R^{n \times d}$ is a matrix of all ones.} of size $40,000 \times 4,000$ and $90,000 \times 2250$, and slightly faster than Blendenpik on other types of input (about 1.1 times faster).
+If $A$ in \eqref{eq::problem} is dense, the state-of-the-art sketching solver is Blendenpik \cite{doi:10.1137/090767911}. Comparing to solvers in the classical state-of-the-art numerical package LAPACK \cite{laug}, Blendenpik is two times faster on matrices of size $20,000 \times 500$ and four times faster on matrices of size $100,000 \times 2500$. Comparing to classical iterative solver LSQR \cite{Paige:1982aa}, Blendenpik is 80 times faster on matrices of size $20,000 \times 1,000$ with condition number $100$. However, Blendenpik only solves \eqref{eq::problem} when the matrix $A$ is dense, and has full numerical rank. Ski-LLS improves upon Blendenpik on both robustness and speed. Two solvers are included in the library Ski-LLS for dense $A$. The robust version, \\{\tt ls_dense_hashing_blendenpik} solves problems \eqref{eq::problem} when $A$ is numerically rank-deficient but is as fast as Blendenpik when $A$ has full rank (takes 70\% to 130\% time on matrices of different sizes). The fast version, {\tt ls_dense_hashing_blendenpik_noCPQR} is 1.6 times faster than Blendenpik on coherent matrices\footnote{Matrices of the form $A \in \R^{n\times d} = \bigl(\begin{smallmatrix} I_{d\times d} \\ 0  \end{smallmatrix}\bigr) + 10^{-8}J_{n,d} $ where $J_{n,d} \in \R^{n \times d}$ is a matrix of all ones.} of size $40,000 \times 4,000$ and $90,000 \times 2250$, and slightly faster than Blendenpik on other types of input (about 1.1 times faster).
 
-If $A$ in \eqref{eq::problem} is sparse, the state-of-the-art solvers are SPQR \cite{Davis:2011ft} and HSL \cite{Scott:2014iq}, which uses sparse QR factorization of $A$ and LSQR with an incomplete Cholesky preconditioner, respectively. Our library has a single sparse solver, {\it ls_sparse_spqr}. It significantly outperforms both state-of-the-art sparse solvers on large random sparse ill-conditioned matrices. It is 10 times faster than HSL and 7 times faster than SPQR on $120,000 \times 5,000$ random sparse matrices with $1\%$ non-zero entries and condition number equals to $10^6$. And it is 3 times faster than both HSL and SPQR on $40,000 \times 2,000$ matrices with $1\%$ non-zero entries and condition number equals to $10^6$.
+If $A$ in \eqref{eq::problem} is sparse, the state-of-the-art solvers are SPQR \cite{Davis:2011ft} and HSL \cite{Scott:2014iq}, which uses sparse QR factorization of $A$ and LSQR with an incomplete Cholesky preconditioner, respectively. Our library has a single sparse solver, {\tt ls_sparse_spqr}. It significantly outperforms both state-of-the-art sparse solvers on large random sparse ill-conditioned matrices. It is 10 times faster than HSL and 7 times faster than SPQR on $120,000 \times 5,000$ random sparse matrices with $1\%$ non-zero entries and condition number equals to $10^6$. And it is 3 times faster than both HSL and SPQR on $40,000 \times 2,000$ matrices with $1\%$ non-zero entries and condition number equals to $10^6$.
 
 Our sparse solver also performs extremely well on highly over-determined sparse inputs from real applications. It is the fastest solver on more than $75 \%$ of problems in the Florida Matrix Collection \cite{Davis_2011} with the matrix $A$ defined in \eqref{eq::problem} having $n\geq 30d$ and $n \geq 20,000$. It is also the fastest solver on more than $90\%$ of problems with the matrix $A$ having $n\geq 10d$, $n \geq 20,000$ but additionally having more than $1\%$ of non-zero entries. 
 
@@ -44,63 +44,68 @@ For further details of computational advantages, see our paper. {\it{Hashing emb
 C. Cartis, J. Fiala and Z. Shao (in preparation) 2021}}. Also see our conference paper \cite{Zhen:ICML}.
 
 \section{Installing Ski-LLS}
-Ski-LLS is available at __ with the BSD license. Please follow the following installation instruction after downloading the package. 
-\subsection{Installing dependencies}
-Ski-LLS relies on the following packages: LAPACK, SuiteSparse, FFTW, and BOOST C++ library. 
+Ski-LLS can be downloaded from {\tt https://github.com/numericalalgorithmsgroup/Ski-LLS} and it is distributed under the BSD license. Please follow the following installation instruction after downloading the package. 
+\subsection{Installing dependencies and configuration}
+Ski-LLS relies on the following external packages: LAPACK \& BLAS, SuiteSparse, FFTW, and BOOST C++ library. It is necessary to point {\tt Makefile} to the correct location of the compiled libraries and include directories with the appropriate header files via make variables {\tt LIBS_LAPACK, LIBS_SPARSE, SPARSE_INCLUDE, LIBS_FFTW, FFTW_INCLUDE} and {\tt BOOSTROOT} respectively. For your convenience, all these make variables are located in a configuration makefile and two sample configurations for Linux/Mac are provided in {\tt ./config} directory. The first one ({\tt ./config/make_gcc.inc}) assumes that there are no pre-installed libraries available and all of them are compiled locally with the GNU Compiler Collection. The second one ({\tt ./config/make_intel.inc}) shows how to benefit from Intel compiler and their optimized Math Kernel Library (MKL). Note that the current version of Ski-LLS is using 64-bit integer size (ILP64) so LAPACK, BLAS and SuiteSparse needs to be compatible. The following paragraphs provides a step-by-step guide how to compile them and set everything up. It should also help as a reference should you wish to use a different setting or system.
 
-\paragraph{Using the vanilla version of LAPACK}
-If the user wishes to use the vanilla version of LAPACK,
+\paragraph{Using the reference version of LAPACK and GNU Compilers}
+The following steps show how to compile all libraries from scratch. The vanilla version of LAPACK and BLAS is used. This works great as a reference point, however, {\bf it is  highly recommended to use tuned version of BLAS} (such as GotoBLAS or MKL) to achieve a good performance suitable for production or benchmarking.
 \begin{enumerate}
-    \item LAPACK installation. First download and unpack the LAPACK.
-        \begin{lstlisting}[breaklines=true, showstringspaces=false]
-        wget -nd https://github.com/Reference-LAPACK/lapack/archive/v3.9.0.tar.gz
-        tar -xzf v3.9.0.tar.gz
-        cd lapack-3.9.0
-        \end{lstlisting}
-    Then, compile the LAPACK with (modified) make configuration as to Ski-LLS uses 64 bits integers. First make a copy of the default configuration
-        \begin{lstlisting}[breaklines=true, showstringspaces=false]
-        cp make.inc.example make.inc
-        \end{lstlisting}
-    Then, go to the make.inc file and change the values of the following three variables
-        \begin{lstlisting}[breaklines=true, showstringspaces=false]
-        CFLAGS = -O3 -fPIC
-        FFLAGS = -O2 -frecursive -fPIC -fdefault-integer-8
-        FFLAGS_NOOPT = -O0 -frecursive -fPIC -fdefault-integer-8
-        \end{lstlisting}
+    \item Reference (vanilla) LAPACK installation.\\
+    First download and unpack the LAPACK.
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    wget -nd https://github.com/Reference-LAPACK/lapack/archive/v3.9.0.tar.gz
+    tar -xzf v3.9.0.tar.gz
+    cd lapack-3.9.0
+    \end{lstlisting}
+    Then, modify LAPACK's compilation flags to use 64 bits integers. First make a copy of the default configuration
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    cp make.inc.example make.inc
+    \end{lstlisting}
+    and change the values of the following three variables in {\tt make.inc}
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    CFLAGS = -O3 -fPIC
+    FFLAGS = -O2 -frecursive -fPIC -fdefault-integer-8
+    FFLAGS_NOOPT = -O0 -frecursive -fPIC -fdefault-integer-8
+    \end{lstlisting}
     Lastly, compile LAPACK
-        \begin{lstlisting}[breaklines=true, showstringspaces=false]
-        make -j 20 blaslib lapacklib 
-        \end{lstlisting}
-    This should generate two libraries: lapack-3.9.0/liblapack.a librefblas.a. Please set the LAPACKROOT macro variable in config/make_gcc.inc to the installation directory, e.g.
-        \begin{lstlisting}[breaklines=true, showstringspaces=false]
-        LAPACKROOT ?= /fserver/zhens/testInstall/Dependencies/lapack-3.9.0
-        \end{lstlisting}
-    It is highly recommended to use tuned libraries to your system/architecture (e.g. the Intel MKL) to achieve a good performance. See later instruction on how to use the Intel MKL with Ski-LLS.
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    make -j 20 blaslib lapacklib 
+    \end{lstlisting}
+    This should generate two libraries: {\tt lapack-3.9.0/liblapack.a, librefblas.a}. Please point {\tt LIBS_LAPACK} in {\tt config/make_gcc.inc} to them in such a way that they can be linked to C/C++ code, in this case Fortran runtime library ({\tt -lgfortran}) needs to be added, e.g.
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    LAPACKROOT = /fserver/zhens/testInstall/Dependencies/lapack-3.9.0
+    LIBS_LAPACK = ${LAPACKROOT}/liblapack.a ${LAPACKROOT}/librefblas.a -lgfortran
+    \end{lstlisting}
     
-    \item SuiteSparse installation. First download and unpack SuiteSparse
+    \item SuiteSparse installation.\\
+    First download and unpack SuiteSparse
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
     wget -nd https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v5.6.0.tar.gz
     tar -xzf v5.6.0.tar.gz
     cd SuiteSparse-5.6.0
     \end{lstlisting}
-    Then compile SuiteSparse by typing (the single command)
+    Then compile SuiteSparse by calling the following command; note that we need to point to our newly compiled LAPACK and BLAS libraries (adjust the path accordingly) and specify that 64-bit integers are used:
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
     make CC=gcc CXX=g++ BLAS="/fserver/zhens/testInstall/Dependencies/lapack-3.9.0/librefblas.a -lgfortran" LAPACK=/fserver/zhens/testInstall/Dependencies/lapack-3.9.0/liblapack.a CHOLMOD_CONFIG=-DLONGBLAS=long UMFPACK_CONFIG=-DLONGBLAS=long 
     \end{lstlisting}
-    , where the variables BLAS and LAPACK above should be changed to reflect the user's installation location of LAPACK. After successfully installing SuiteSparse, set the variable SUITSPARSEROOT in config/make_gcc.inc to the installation directory, e.g. 
+    After successfully installing SuiteSparse, point the variables {\tt LIBS_SPARSE} and {\tt SPARSE_INCLUDE} in {\tt config/make_gcc.inc} to the correct location, e.g. 
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
-    SUITSPARSEROOT ?= /fserver/zhens/testInstall/Dependencies/SuiteSparse-5.6.0/
+    SUITSPARSEROOT = /fserver/zhens/testInstall/Dependencies/SuiteSparse-5.6.0/
+    SPARSE_INCLUDE = ${SUITSPARSEROOT}/include
+    LIBS_SPARSE = -L${SUITSPARSEROOT}/lib -lcxsparse -lcholmod -lspqr
     \end{lstlisting}
-    Lastly tell the linker where to find the shared library. If you are using bash shell,
+    SuiteSparse by default produces shared libraries so system variable {\tt LD_LIBRARY_PATH} needs to be created or extended for the executables to find SuiteSparse libraries. For example, if you are using bash shell call
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
     export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:$PWD/lib"
     \end{lstlisting}
-    ; and if you are using csh shell,
+    and similarly if you are using csh shell
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
     setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$PWD/lib" 
     \end{lstlisting}
     
-    \item FFTW installation. Download, unpack and compile FFTW
+    \item FFTW installation.\\
+    Download, unpack and compile FFTW:
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
     wget -nd http://www.fftw.org/fftw-3.3.8.tar.gz
     tar -xzf fftw-3.3.8.tar.gz
@@ -108,72 +113,89 @@ If the user wishes to use the vanilla version of LAPACK,
     configure
     make
     \end{lstlisting}
-    Then set FFTWROOT in config/make_gcc.inc to the installation directory, e.g. 
+    Then set {\tt LIBS_FFTW, FFTW_INCLUDE} in {\tt config/make_gcc.inc} as appropriate, e.g. 
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
-    FFTWROOT ?= /fserver/zhens/testInstall/Dependencies/fftw-3.3.8/
+    FFTWROOT = /fserver/zhens/testInstall/Dependencies/fftw-3.3.8/
+    FFTW_INCLUDE = ${FFTWROOT}/api
+    LIBS_FFTW = ${FFTWROOT}/.libs/libfftw3.a
     \end{lstlisting}
     
-    \item BOOST C++ library installation. BOOST C++ library is a header only library, therefore does not require compilation. Download and unpack BOOST C++ library by
+    \item BOOST C++ library installation.\\
+    BOOST C++ library is a header only library, therefore does not require compilation. Download and unpack BOOST C++ library:
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
     wget -nd https://boostorg.jfrog.io/artifactory/main/release/1.72.0/source/boost_1_72_0.tar.gz
     tar -xzf boost_1_72_0.tar.gz
     \end{lstlisting}
-    Then set BOOSTROOT in config/make_gcc.inc to the correct location, e.g.
+    Then set {\tt BOOSTROOT} in {\tt config/make_gcc.inc} to the correct location, e.g.
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
     BOOSTROOT ?= /fserver/zhens/testInstall/Dependencies/boost_1_72_0/
     \end{lstlisting}
+    
+    \item (optional) Adjust compilers and compiler flags (such as optimization level) via standard make variables {\tt CC, CFLAGS, CXX} and {\tt CXXFLAGS} in the configuration makefile, {\tt config/make_gcc.inc} uses the following:
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    CXX = g++
+    CC = gcc
+    CXXFLAGS = -Wall -O3 -march=native -fPIC -std=c++11
+    CFLAGS = -Wall -O3
+    \end{lstlisting}
 \end{enumerate}
 
-\paragraph{Using a highly tuned version of LAPACK, such as Intel MKL}
-If the user wishes to use the LAPACK comes with Intel MKL (or similarly other compiled LAPACK library, in which case the following instruction will needs to be adapted),
+\paragraph{Using Intel's tuned version of LAPACK (MKL) and Intel compilers}
+The following steps demonstrate how to set up Ski-LLS using Intel MKL, this configuration has been used for benchmarking reported in the paper CITE-ME-HERE.
 \begin{enumerate}
-    \item Check that the environmental variable \$MKLROOT is set in your shell. This typically requires a command such as 
+    \item Configuration for MKL LAPACK \& BLAS\\
+    Check that the environmental variable {\tt \$MKLROOT} is set in your shell. If not, you might need to call a command such as  
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
     source /fserver/intel/opt/intel/compilers_and_libraries_2019.1.144/linux/bin/compilervars.sh intel64
     \end{lstlisting}
-    \item Install SuiteSparse. Download and unpack SuiteSparse as before, but compiling the package with the MKL library by using
+    for bash or a similar one for csh
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    source /fserver/intel/opt/intel/compilers_and_libraries_2019.1.144/linux/bin/compilervars.csh intel64
+    \end{lstlisting}
+    Then set {\tt LIBS_LAPACK} in {\tt config/make_intel.inc} to the appropriate MKL libraries, for example for dynamic linking:
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    LIBS_LAPACK = -L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
+    \end{lstlisting}
+    Note that we need to use 64-bit integers (ILP64) version of LAPACK and BLAS. The easiest is to check the MKL Link Advisor\footnote{\tt https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/onemkl/link-line-advisor.html} for your version of MKL and operating system. 
+    \item Install SuiteSparse.\\
+    Download and unpack SuiteSparse as before, but point {\tt make} to the MKL version of LAPACK \& BLAS (and the usage of 64-bit integer size as previously):
     \begin{lstlisting}[breaklines=true, showstringspaces=false]
     make CC=icc CXX=icc BLAS="-L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl" LAPACK="" CHOLMOD_CONFIG=-DLONGBLAS=long UMFPACK_CONFIG=-DLONGBLAS=long
     \end{lstlisting}
-    Set SUITSPARSEROOT in config/make_intel.inc, and LD_LIBRARY_PATH, similarly as before. 
+    Set {\tt LIBS_SPARSE} and {\tt SPARSE_INCLUDE} in {\tt config/make_intel.inc} to the correct location. If you are using shared SuiteSparse libraries, don't forget to adapt system variable {\tt LD_LIBRARY_PATH}, similarly as before.
+
+    \item Install FFTW.\\
+    FFTW is included in your MKL distribution so either you can use that one or compile one from scratch. With the former approach you can leave {\tt FFTW_INCLUDE, LIBS_FFTW} empty as the library is already included in {\tt LIBS_LAPACK}. If you wish to compile FFTW from the sources, please follow the same instructions as with GNU Compilers.
     
-    \item Install FFTW and BOOST C++ library as before. Set FFTWROOT and BOOSTROOT in config/make_intel.inc similarly as before.
+    \item BOOST C++ library installation is identical to the previous case, just modify the location in {\tt BOOSTROOT} in {\tt config/make_intel.inc} as appropriate.
+    
+    \item (optional) Compilers and their flags can be modified, {\tt config/make_intel.inc} uses
+    \begin{lstlisting}[breaklines=true, showstringspaces=false]
+    CXX = icc
+    CC = icc
+    CXXFLAGS =  -DMKL_ILP64  -m64  -I"${MKLROOT}/include" -Wall -O3 -march=native -fPIC -std=c++11
+    CFLAGS = -O3
+    \end{lstlisting}
 \end{enumerate}
 
-\subsection{Install and test Ski-LLS}
+\subsection{Compilation and testing of Ski-LLS}
 
-\paragraph{Assuming the vanilla version of LAPACK is installed and set}
-When in the top-level directory of the Ski-LLS package, type
-\begin{lstlisting}[breaklines=true, showstringspaces=false]
-make lib
-\end{lstlisting}
-to install the Ski-LLS package. 
+If the configuration makefile is correctly adapted (as described in the previous section), it is sufficient to point {\tt make} to it by setting {\tt CONFIG=config/my_config_file} on the command line and invoke the desired target. If no {\tt CONFIG} is given, {\tt config/make_gcc.inc} is assumed. Calling {\tt make} without any target with print help showing all possibilities.
 
-To test the installation, type
-\begin{lstlisting}[breaklines=true, showstringspaces=false]
-make test
-\end{lstlisting}
-This will test all the three solvers in Ski-LLS, along with other solvers that are compared in our paper. 
-
-To compile and test the minimal working example of solvers provided in Ski-LLS, type
-\begin{lstlisting}[breaklines=true, showstringspaces=false]
-make example
-\end{lstlisting}
-This will compile the two example files in test/, and run them.
-
-\paragraph{Assuming the Intel MKL version of LAPACK is installed and set}
-In this case, to install Ski-LLS, type
+Typically, you will invoke {\tt make} in the top-level directory of the Ski-LLS package with target {\tt lib} to build the Ski-LLS package, for example:
 \begin{lstlisting}[breaklines=true, showstringspaces=false]
 make CONFIG=config/make_intel.inc lib
 \end{lstlisting}
-To test the installation, type
+To test the installation by running all the solvers (the three solvers in Ski-LLS, along with the others that are compared in our paper) on several small data files included in the distribution, use:
 \begin{lstlisting}[breaklines=true, showstringspaces=false]
 make CONFIG=config/make_intel.inc test
 \end{lstlisting}
-And to compile and test the minimal working example of solvers in Ski-LLS, type
+To compile, link and run the minimal working example of solvers provided in Ski-LLS, type
 \begin{lstlisting}[breaklines=true, showstringspaces=false]
 make CONFIG=config/make_intel.inc example
 \end{lstlisting}
+
+To use Ski-LLS package outside of the provided driver files and make, the source will need to include the main header file of the package {\tt \#include "ski-lls.h"}, compile the source while pointing to the Ski-LLS include directory, e.g. {\tt -Iski-lls/include} and link against all necessary libraries {\tt ski-lls/LIB/libski-lls.a \$(LIBS_SPARSE) \$(LIBS_FFTW) \$(LIBS_LAPACK) -lpthread -lm -ldl}. Don't forget to adapt {\tt LD_LIBRARY_PATH} to reflect any dynamic linking, such as of SuiteSparse.
 
 \subsection{Optional tuning of FFTW}
 Using FFTW wisdom means pre-tuning FFTW for better performance. Note that this does not affect the sparse solver in Ski-LLS.
@@ -201,24 +223,24 @@ If one wishes to use FFTW wisdom:
 This is a library of three routines for solving problem \eqref{eq::problem}. 
 
 \begin{itemize}
-	\item If the matrix $A$ is dense, {\it ls_dense_hashing_blendenpik} uses LSQR with a preconditioner built from a sketch of the matrix $A$ using Hashed-Randomised-Discrete-Hartley-Transform (HR-DHT) and Randomised-Column-Pivoted-QR (R-CPQR) to solve \eqref{eq::problem}.
+	\item {\tt ls_dense_hashing_blendenpik} is suitable if the matrix $A$ is dense, it uses LSQR with a preconditioner built from a sketch of the matrix $A$ using Hashed-Randomised-Discrete-Hartley-Transform (HR-DHT) and Randomised-Column-Pivoted-QR (R-CPQR) to solve \eqref{eq::problem}.
 
-	\item If $A$ is dense and has full numerical rank, {\it ls_dense_hashing_blendenpik_noCPQR} uses LSQR with a preconditioner built from a sketch of the matrix $A$ using HR-DHT and Column-Pivoted-QR (CPQR) to solve \eqref{eq::problem}.
+	\item {\tt ls_dense_hashing_blendenpik_noCPQR} is a version if $A$ is dense and has full numerical rank, it uses LSQR with a preconditioner built from a sketch of the matrix $A$ using HR-DHT and Column-Pivoted-QR (CPQR) to solve \eqref{eq::problem}.
 
-	\item   If $A$ is sparse, {\it ls_sparse_spqr} uses LSQR with a preconditioner built from a sketch of the matrix $A$ using $s-$hashing and sparse QR (SPQR) to solve \eqref{eq::problem}.
+	\item {\tt ls_sparse_spqr} is aimed for sparse matrices $A$ and uses LSQR with a preconditioner built from a sketch of the matrix $A$ using $s-$hashing and sparse QR (SPQR) to solve \eqref{eq::problem}.
 \end{itemize}
 
 \subsection{Data structure}
 
 \paragraph{Dense Vector and Matrix}
-Ski-LLS uses C++ class Vec for dense vectors and C++ class Mat for dense matrices. 
-To create a $n\times 1$ vector from already existed data, take a pointer to the data and call Vec(n, *data). 
-To create a $n \times d$ matrix from already existed data, take a pointer to the data and call Mat(n, d, *data). Basic matrix operations such as return a specific row, column, or matrix-matrix and matrix vector multiplications are implemented.  
-These classes are defined in include/Vec.hpp and include/impl/Mat.hpp respectively. 
+Ski-LLS uses C++ class {\tt Vec} for dense vectors and C++ class {\tt Mat} for dense matrices. 
+To create a $n\times 1$ vector from already existed data, take a pointer to the data and call {\tt Vec(n, *data)}. 
+To create a $n \times d$ matrix from already existed data, take a pointer to the data and call {\tt Mat(n, d, *data)}. Basic matrix operations such as return a specific row, column, or matrix-matrix and matrix vector multiplications are implemented.  
+These classes are defined in {\tt include/Vec.hpp} and {\tt include/impl/Mat.hpp} respectively. 
 
 
 \paragraph{Sparse Matrix}
-Ski-LLS uses the Compressed Column data structure for sparse matrices and vectors. The sparse data structure is from SuiteSparse \cite{Davis:2011ft}. The cs_dl and cholmod_sparse structures are defined in cs.h and cholmod_core.h respectively in SuiteSparse/include folder. 
+Ski-LLS uses the Compressed Column data structure for sparse matrices and vectors. The sparse data structure is from SuiteSparse \cite{Davis:2011ft}. The {\tt cs_dl} and {\tt cholmod_sparse} structures are defined in {\tt cs.h} and {\tt cholmod_core.h} respectively in {\tt SuiteSparse/include} folder. 
 
 
 
@@ -228,7 +250,7 @@ Ski-LLS uses the Compressed Column data structure for sparse matrices and vector
 
 To compute a solution of a linear least square problem where the matrix $A$ is dense, a call of the following form should be made. \\
 
-ls_dense_hashing_blendenpik(A, b, x, rank, flag, it, gamma, k, abs_tol, rcond, it_tol, max_it, debug, wisdom):
+{\tt ls_dense_hashing_blendenpik(A, b, x, rank, flag, it, gamma, k, abs_tol, rcond, it_tol, max_it, debug, wisdom)}
 	\begin{itemize}
 	\setlength\itemsep{-0.5em}
 	\item Inputs 
@@ -276,11 +298,13 @@ ls_dense_hashing_blendenpik(A, b, x, rank, flag, it, gamma, k, abs_tol, rcond, i
 
 If the matrix $A$ is known to be of full numerical rank, then a different routine can be used which is faster:
 
-ls_dense_hashing_blendenpik_noCPQR(A, b, x, rank, flag, it, gamma, k, it_tol, max_it, debug, wisdom). The arguments usage is the same as above, but we don't need the rank-detection parameter rcond, and the shortcut related to abs_tol is not implemented.
+{\tt ls_dense_hashing_blendenpik_noCPQR(A, b, x, rank, flag, it, gamma, k, it_tol, max_it, debug, wisdom)}
+
+The arguments usage is the same as above, but we don't need the rank-detection parameter rcond, and the shortcut related to abs_tol is not implemented.
 
 \paragraph{Example}
 
-The following program (test/ski-llsDenseExample.cpp) solves an example of problem \eqref{eq::problem} with given $A$ and $b$, where 
+The following program ({\tt test/ski-llsDenseExample.cpp}) solves an example of problem \eqref{eq::problem} with given $A$ and $b$, where 
 \begin{equation}
 A = \begin{pmatrix}
 0.306051 & -1.53078 \\
@@ -354,8 +378,8 @@ int main(int argc, char **argv)
 
 To compute a solution of a linear least square problem where the matrix $A$ is sparse, a call of the following form should be made. \\
 
-ls_sparse_spqr(*A, b, x, 
-    rank, flag, it, gamma, k, abs_tol, ordering, it_tol, max_it, rcond, peturb, debug):
+{\tt ls_sparse_spqr(*A, b, x, 
+    rank, flag, it, gamma, k, abs_tol, ordering, it_tol, max_it, rcond, peturb, debug)}
 
 	\begin{itemize}
 	\setlength\itemsep{-0.5em}
@@ -405,7 +429,7 @@ ls_sparse_spqr(*A, b, x,
 
 \paragraph{Example}
 
-The following program (test/ski-llsSparseExample.cpp) solves an example of problem \eqref{eq::problem} with given sparse $A$ and dense $b$, where 
+The following program ({\tt test/ski-llsSparseExample.cpp}) solves an example of problem \eqref{eq::problem} with given sparse $A$ and dense $b$, where 
 \begin{equation}
 A = \begin{pmatrix}
      2     & 3     & 0\\
