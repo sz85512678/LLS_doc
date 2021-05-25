@@ -1,5 +1,0 @@
-\BOOKMARK [1][-]{section.1}{Overview}{}% 1
-\BOOKMARK [1][-]{section.2}{Use of External Library}{}% 2
-\BOOKMARK [1][-]{section.3}{Generating a sparse dimensionality reduction matrix in compressed column format}{}% 3
-\BOOKMARK [1][-]{section.4}{Use abstract linear operator concept for a variety of preconditioner format}{}% 4
-\BOOKMARK [1][-]{section.5}{One version of randomised sparse linear least squares solver}{}% 5

@@ -3,49 +3,49 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: Doc.aux
 The style file: abbrv.bst
 Database file #1: bib/lib_20Aug.bib
-Repeated entry---line 4791 of file bib/lib_20Aug.bib
- : @article{doi:10.1137/090767911
- :                               ,
+Repeated entry---line 1899 of file bib/lib_20Aug.bib
+ : @article{Martinsson:2017eh
+ :                           ,
 I'm skipping whatever remains of this entry
-You've used 8 entries,
+You've used 9 entries,
             2118 wiz_defined-function locations,
-            542 strings with 5005 characters,
-and the built_in function-call counts, 2577 in all, are:
-= -- 246
-> -- 142
+            559 strings with 5519 characters,
+and the built_in function-call counts, 3075 in all, are:
+= -- 295
+> -- 181
 < -- 0
-+ -- 56
-- -- 48
-* -- 214
-:= -- 457
-add.period$ -- 24
-call.type$ -- 8
-change.case$ -- 48
++ -- 71
+- -- 62
+* -- 252
+:= -- 545
+add.period$ -- 29
+call.type$ -- 9
+change.case$ -- 58
 chr.to.int$ -- 0
-cite$ -- 8
-duplicate$ -- 87
-empty$ -- 182
-format.name$ -- 48
-if$ -- 507
+cite$ -- 9
+duplicate$ -- 98
+empty$ -- 208
+format.name$ -- 62
+if$ -- 604
 int.to.chr$ -- 0
-int.to.str$ -- 8
-missing$ -- 9
-newline$ -- 43
-num.names$ -- 16
-pop$ -- 36
+int.to.str$ -- 9
+missing$ -- 10
+newline$ -- 50
+num.names$ -- 18
+pop$ -- 46
 preamble$ -- 1
-purify$ -- 40
+purify$ -- 49
 quote$ -- 0
-skip$ -- 61
+skip$ -- 65
 stack$ -- 0
-substring$ -- 125
-swap$ -- 8
+substring$ -- 158
+swap$ -- 9
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 30
+type$ -- 34
 warning$ -- 0
-while$ -- 25
-width$ -- 9
-write$ -- 91
+while$ -- 29
+width$ -- 10
+write$ -- 104
 (There was 1 error message)

@@ -13,18 +13,26 @@ H.~Avron, P.~Maymounkov, and S.~Toledo.
 \newblock {\em SIAM Journal on Scientific Computing}, 32(3):1217--1236, Jan.
   2010.
 
+\bibitem{Zhen:ICML}
+C.~Cartis, J.~Fiala, and Z.~Shao.
+\newblock {Sparse sketching for sparse linear least squares}.
+\newblock {\em ICML Workshop Beyond first order methods for ML systems}, 2020.
+\newblock available at
+  https://drive.google.com/file/d/1BacyZwtZSKZBBblLC7x4SikuDQaLHuYK/view.
+
+\bibitem{Zhen:OpOnline}
+C.~Cartis, J.~Fiala, and Z.~Shao.
+\newblock {Hashing embeddings of optimal dimension, with applications to linear
+  least squares}.
+\newblock {\em Optimization-Online}, 2021.
+\newblock available at
+  http://www.optimization-online.org/DB_HTML/2021/05/8413.html.
+
 \bibitem{Davis:2011ft}
 T.~A. Davis.
 \newblock {Algorithm 915, SuiteSparseQR: Multifrontal multithreaded
   rank-revealing sparse QR factorization}.
 \newblock {\em ACM Transactions on Mathematical Software (TOMS)}, 38(1):8, Nov.
-  2011.
-
-\bibitem{10.1145/2049662.2049670}
-T.~A. Davis.
-\newblock {Algorithm 915, SuiteSparseQR: Multifrontal Multithreaded
-  Rank-Revealing Sparse QR Factorization}.
-\newblock {\em ACM Transactions on Mathematical Software (TOMS)}, 38(1), Dec.
   2011.
 
 \bibitem{Davis_2011}
@@ -33,11 +41,11 @@ T.~A. Davis and Y.~Hu.
 \newblock {\em ACM Transactions on Mathematical Software}, 38(1):1--25, Nov.
   2011.
 
-\bibitem{10.1145/2049662.2049663}
-T.~A. Davis and Y.~Hu.
-\newblock {The University of Florida Sparse Matrix Collection}.
-\newblock {\em ACM Transactions on Mathematical Software (TOMS)}, 38(1), Dec.
-  2011.
+\bibitem{Martinsson:2017eh}
+P.-G. Martinsson, G.~Quintana~Ort\'{\i}, N.~Heavner, and R.~van~de Geijn.
+\newblock Householder {QR} factorization with randomization for column pivoting
+  ({HQRRP}).
+\newblock {\em SIAM J. Sci. Comput.}, 39(2):C96--C115, 2017.
 
 \bibitem{Paige:1982aa}
 C.~C. Paige and M.~A. Saunders.
